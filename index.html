@@ -1476,26 +1476,30 @@
 
         </div>
 
-        <form class="space-y-5" onsubmit="event.preventDefault(); const checked = document.querySelectorAll('input[name=weeks]:checked'); if (checked.length === 0) { document.getElementById('weekError').classList.remove('hidden'); return; } const weeks = Array.from(checked).map(c => c.value).join(', '); alert('Thank you! We will contact you within 24 hours to confirm your reservation for: ' + weeks); closeModal();">
+        <form id="signupForm" class="space-y-5" novalidate>
           <div class="grid md:grid-cols-2 gap-5">
             <div>
               <label class="block text-[10px] tracking-[0.18em] uppercase text-forest font-semibold mb-2">Parent Name</label>
-              <input type="text" required class="w-full px-4 py-3 bg-cream border border-forest/15 text-sm text-charcoal placeholder:text-stone-light font-light" placeholder="First Last">
+              <input type="text" id="parentName" required pattern="\S+\s+\S+" title="Please enter first and last name" class="w-full px-4 py-3 bg-cream border border-forest/15 text-sm text-charcoal placeholder:text-stone-light font-light" placeholder="First Last">
+              <p class="hidden text-[10px] tracking-wide text-red-700 mt-1 field-error">Please enter first and last name.</p>
             </div>
             <div>
               <label class="block text-[10px] tracking-[0.18em] uppercase text-forest font-semibold mb-2">Camper Name</label>
-              <input type="text" required class="w-full px-4 py-3 bg-cream border border-forest/15 text-sm text-charcoal placeholder:text-stone-light font-light" placeholder="First Last">
+              <input type="text" id="camperName" required pattern="\S+\s+\S+" title="Please enter first and last name" class="w-full px-4 py-3 bg-cream border border-forest/15 text-sm text-charcoal placeholder:text-stone-light font-light" placeholder="First Last">
+              <p class="hidden text-[10px] tracking-wide text-red-700 mt-1 field-error">Please enter first and last name.</p>
             </div>
           </div>
 
           <div class="grid md:grid-cols-2 gap-5">
             <div>
               <label class="block text-[10px] tracking-[0.18em] uppercase text-forest font-semibold mb-2">Email</label>
-              <input type="email" required class="w-full px-4 py-3 bg-cream border border-forest/15 text-sm text-charcoal placeholder:text-stone-light font-light" placeholder="parent@email.com">
+              <input type="email" id="parentEmail" required class="w-full px-4 py-3 bg-cream border border-forest/15 text-sm text-charcoal placeholder:text-stone-light font-light" placeholder="parent@email.com">
+              <p class="hidden text-[10px] tracking-wide text-red-700 mt-1 field-error">Please enter a valid email address.</p>
             </div>
             <div>
               <label class="block text-[10px] tracking-[0.18em] uppercase text-forest font-semibold mb-2">Phone</label>
-              <input type="tel" class="w-full px-4 py-3 bg-cream border border-forest/15 text-sm text-charcoal placeholder:text-stone-light font-light" placeholder="(555) 123-4567">
+              <input type="tel" id="parentPhone" required pattern="[\d\s\-\(\)\+]{10,}" title="Please enter a valid phone number (at least 10 digits)" class="w-full px-4 py-3 bg-cream border border-forest/15 text-sm text-charcoal placeholder:text-stone-light font-light" placeholder="(555) 123-4567">
+              <p class="hidden text-[10px] tracking-wide text-red-700 mt-1 field-error">Please enter a valid phone number (at least 10 digits).</p>
             </div>
           </div>
 
@@ -1661,16 +1665,18 @@
           <div class="grid md:grid-cols-2 gap-5">
             <div>
               <label class="block text-[10px] tracking-[0.18em] uppercase text-forest font-semibold mb-2">Emergency Contact Name</label>
-              <input type="text" required class="w-full px-4 py-3 bg-cream border border-forest/15 text-sm text-charcoal placeholder:text-stone-light font-light" placeholder="First Last">
+              <input type="text" id="emergencyName" required pattern="\S+\s+\S+" title="Please enter first and last name" class="w-full px-4 py-3 bg-cream border border-forest/15 text-sm text-charcoal placeholder:text-stone-light font-light" placeholder="First Last">
+              <p class="hidden text-[10px] tracking-wide text-red-700 mt-1 field-error">Please enter first and last name.</p>
             </div>
             <div>
               <label class="block text-[10px] tracking-[0.18em] uppercase text-forest font-semibold mb-2">Emergency Contact Phone</label>
-              <input type="tel" required class="w-full px-4 py-3 bg-cream border border-forest/15 text-sm text-charcoal placeholder:text-stone-light font-light" placeholder="(555) 123-4567">
+              <input type="tel" id="emergencyPhone" required pattern="[\d\s\-\(\)\+]{10,}" title="Please enter a valid phone number (at least 10 digits)" class="w-full px-4 py-3 bg-cream border border-forest/15 text-sm text-charcoal placeholder:text-stone-light font-light" placeholder="(555) 123-4567">
+              <p class="hidden text-[10px] tracking-wide text-red-700 mt-1 field-error">Please enter a valid phone number (at least 10 digits).</p>
             </div>
           </div>
 
           <div>
-            <label class="block text-[10px] tracking-[0.18em] uppercase text-forest font-semibold mb-2">Additional Notes</label>
+            <label class="block text-[10px] tracking-[0.18em] uppercase text-forest font-semibold mb-2">Additional Notes <span class="text-stone font-light normal-case tracking-normal">(optional)</span></label>
             <textarea rows="2" class="w-full px-4 py-3 bg-cream border border-forest/15 text-sm text-charcoal placeholder:text-stone-light font-light resize-none" placeholder="Anything else we should know — questions, special requests, etc."></textarea>
           </div>
 
@@ -1721,10 +1727,28 @@
               <svg class="ml-3 w-4 h-4" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path d="M5 12h14M12 5l7 7-7 7"/></svg>
             </button>
             <p class="text-stone text-xs font-light mt-4 text-center">
-              By registering, you agree to our terms and privacy policy.
+              By registering, you agree to our <a href="terms.html" class="underline hover:text-forest transition-colors">terms</a> and <a href="privacy.html" class="underline hover:text-forest transition-colors">privacy policy</a>.
             </p>
           </div>
         </form>
+
+        <!-- ─── Confirmation screen (hidden by default) ─── -->
+        <div id="signupConfirmation" class="hidden p-8 md:p-12">
+          <div class="flex flex-col items-center justify-center text-center py-16">
+            <div class="w-16 h-16 rounded-full bg-forest/10 flex items-center justify-center mb-6">
+              <svg width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="#1F5D2E" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M20 6L9 17l-5-5"/></svg>
+            </div>
+            <h2 class="font-display text-3xl md:text-4xl text-charcoal font-semibold tracking-[-0.02em] leading-[1.1] mb-4">
+              Thanks for<br>Signing Up!
+            </h2>
+            <p class="text-stone text-sm font-light leading-[1.7] max-w-sm mb-8">
+              You will receive more information in your inbox shortly. We can't wait to see you on the course.
+            </p>
+            <button type="button" onclick="closeModal(); setTimeout(resetSignupForm, 400);" class="px-10 py-3 bg-forest text-cream text-[11px] tracking-[0.22em] uppercase font-semibold btn-luxury hover:bg-forest-dark hover:shadow-[0_16px_40px_rgba(31,93,46,0.25)]">
+              Done
+            </button>
+          </div>
+        </div>
       </div>
     </div>
   </div>
@@ -1930,8 +1954,12 @@
       modal.classList.remove('is-open');
       modal.setAttribute('aria-hidden', 'true');
       document.body.classList.remove('modal-open');
+      // Reset to form view after animation so reopening shows the form
+      setTimeout(function() {
+        if (typeof resetSignupForm === 'function') resetSignupForm();
+      }, 400);
     }
-    // Expose for inline onsubmit
+    // Expose for inline onclick
     window.closeModal = closeModal;
     window.resetWeeks = resetWeeks;
 
@@ -1946,6 +1974,109 @@
 
     // Initial total render
     updateTotal();
+
+    // ─── Signup form validation + confirmation ───
+    const signupForm = document.getElementById('signupForm');
+    const signupConfirmation = document.getElementById('signupConfirmation');
+
+    function countDigits(str) {
+      return (str.match(/\d/g) || []).length;
+    }
+
+    function hasFirstAndLast(str) {
+      return str.trim().split(/\s+/).length >= 2;
+    }
+
+    signupForm.addEventListener('submit', function(e) {
+      e.preventDefault();
+
+      // Clear previous errors
+      signupForm.querySelectorAll('.field-error').forEach(el => el.classList.add('hidden'));
+      signupForm.querySelectorAll('.border-red-400').forEach(el => el.classList.remove('border-red-400'));
+
+      let firstBad = null;
+
+      function showError(input) {
+        const err = input.parentElement.querySelector('.field-error');
+        if (err) err.classList.remove('hidden');
+        input.classList.add('border-red-400');
+        if (!firstBad) firstBad = input;
+      }
+
+      // Parent name — first + last
+      const parentName = document.getElementById('parentName');
+      if (!hasFirstAndLast(parentName.value)) showError(parentName);
+
+      // Camper name — first + last
+      const camperName = document.getElementById('camperName');
+      if (!hasFirstAndLast(camperName.value)) showError(camperName);
+
+      // Email
+      const email = document.getElementById('parentEmail');
+      if (!email.value.trim() || !email.validity.valid) showError(email);
+
+      // Phone — at least 10 digits
+      const phone = document.getElementById('parentPhone');
+      if (countDigits(phone.value) < 10) showError(phone);
+
+      // Age
+      const age = signupForm.querySelector('select[required]');
+      if (!age.value) {
+        age.classList.add('border-red-400');
+        if (!firstBad) firstBad = age;
+      }
+
+      // Skill level
+      const selects = signupForm.querySelectorAll('select[required]');
+      selects.forEach(s => {
+        if (!s.value) {
+          s.classList.add('border-red-400');
+          if (!firstBad) firstBad = s;
+        }
+      });
+
+      // Weeks
+      const checked = signupForm.querySelectorAll('input[name=weeks]:checked');
+      if (checked.length === 0) {
+        document.getElementById('weekError').classList.remove('hidden');
+        if (!firstBad) firstBad = document.getElementById('weekGrid');
+      }
+
+      // Emergency name — first + last
+      const emergName = document.getElementById('emergencyName');
+      if (!hasFirstAndLast(emergName.value)) showError(emergName);
+
+      // Emergency phone — at least 10 digits
+      const emergPhone = document.getElementById('emergencyPhone');
+      if (countDigits(emergPhone.value) < 10) showError(emergPhone);
+
+      // Payment
+      const paymentPicked = signupForm.querySelector('input[name=payment]:checked');
+      if (!paymentPicked) {
+        if (!firstBad) firstBad = signupForm.querySelector('input[name=payment]').closest('label');
+      }
+
+      if (firstBad) {
+        firstBad.scrollIntoView({ behavior: 'smooth', block: 'center' });
+        return;
+      }
+
+      // All good — show confirmation
+      signupForm.classList.add('hidden');
+      signupConfirmation.classList.remove('hidden');
+      modal.querySelector('.modal-card').scrollTop = 0;
+    });
+
+    function resetSignupForm() {
+      signupForm.reset();
+      signupForm.classList.remove('hidden');
+      signupConfirmation.classList.add('hidden');
+      signupForm.querySelectorAll('.field-error').forEach(el => el.classList.add('hidden'));
+      signupForm.querySelectorAll('.border-red-400').forEach(el => el.classList.remove('border-red-400'));
+      document.getElementById('weekError').classList.add('hidden');
+      updateTotal();
+    }
+    window.resetSignupForm = resetSignupForm;
 
     // Close triggers
     document.querySelectorAll('[data-close-modal]').forEach(btn => {
