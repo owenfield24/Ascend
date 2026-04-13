@@ -1500,7 +1500,7 @@
             </div>
             <div>
               <label class="block text-[10px] tracking-[0.18em] uppercase text-forest font-semibold mb-2">Phone</label>
-              <input type="tel" id="parentPhone" required pattern="[\d\s\-\(\)\+]{10,}" title="Please enter a valid phone number (at least 10 digits)" class="w-full px-4 py-3 bg-cream border border-forest/15 text-sm text-charcoal placeholder:text-stone-light font-light" placeholder="(555) 123-4567">
+              <input type="tel" id="parentPhone" required pattern="\(\d{3}\)\s\d{3}-\d{4}" title="Please enter a valid 10-digit phone number" maxlength="14" class="w-full px-4 py-3 bg-cream border border-forest/15 text-sm text-charcoal placeholder:text-stone-light font-light" placeholder="(555) 123-4567">
               <p class="hidden text-[10px] tracking-wide text-red-700 mt-1 field-error">Please enter a valid phone number (at least 10 digits).</p>
             </div>
           </div>
@@ -1672,7 +1672,7 @@
             </div>
             <div>
               <label class="block text-[10px] tracking-[0.18em] uppercase text-forest font-semibold mb-2">Emergency Contact Phone</label>
-              <input type="tel" id="emergencyPhone" required pattern="[\d\s\-\(\)\+]{10,}" title="Please enter a valid phone number (at least 10 digits)" class="w-full px-4 py-3 bg-cream border border-forest/15 text-sm text-charcoal placeholder:text-stone-light font-light" placeholder="(555) 123-4567">
+              <input type="tel" id="emergencyPhone" required pattern="\(\d{3}\)\s\d{3}-\d{4}" title="Please enter a valid 10-digit phone number" maxlength="14" class="w-full px-4 py-3 bg-cream border border-forest/15 text-sm text-charcoal placeholder:text-stone-light font-light" placeholder="(555) 123-4567">
               <p class="hidden text-[10px] tracking-wide text-red-700 mt-1 field-error">Please enter a valid phone number (at least 10 digits).</p>
             </div>
           </div>
@@ -1996,6 +1996,21 @@
     // Initial total render
     updateTotal();
 
+    // ─── Phone auto-format: (XXX) XXX-XXXX ───
+    function formatPhone(input) {
+      input.addEventListener('input', function() {
+        let digits = this.value.replace(/\D/g, '').slice(0, 10);
+        let formatted = '';
+        if (digits.length > 0) formatted = '(' + digits.slice(0, 3);
+        if (digits.length >= 3) formatted += ') ';
+        if (digits.length > 3) formatted += digits.slice(3, 6);
+        if (digits.length >= 6) formatted += '-' + digits.slice(6, 10);
+        this.value = formatted;
+      });
+    }
+    formatPhone(document.getElementById('parentPhone'));
+    formatPhone(document.getElementById('emergencyPhone'));
+
     // ─── Signup form validation + confirmation ───
     const signupForm = document.getElementById('signupForm');
     const signupConfirmation = document.getElementById('signupConfirmation');
@@ -2036,9 +2051,9 @@
       const email = document.getElementById('parentEmail');
       if (!email.value.trim() || !email.validity.valid) showError(email);
 
-      // Phone — at least 10 digits
+      // Phone — must be fully formatted (XXX) XXX-XXXX = 10 digits
       const phone = document.getElementById('parentPhone');
-      if (countDigits(phone.value) < 10) showError(phone);
+      if (countDigits(phone.value) !== 10) showError(phone);
 
       // Age
       const age = signupForm.querySelector('select[required]');
@@ -2067,9 +2082,9 @@
       const emergName = document.getElementById('emergencyName');
       if (!hasFirstAndLast(emergName.value)) showError(emergName);
 
-      // Emergency phone — at least 10 digits
+      // Emergency phone — must be fully formatted
       const emergPhone = document.getElementById('emergencyPhone');
-      if (countDigits(emergPhone.value) < 10) showError(emergPhone);
+      if (countDigits(emergPhone.value) !== 10) showError(emergPhone);
 
       // Payment
       const paymentPicked = signupForm.querySelector('input[name=payment]:checked');
