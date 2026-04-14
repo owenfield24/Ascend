@@ -1494,9 +1494,9 @@
               <p class="hidden text-[10px] tracking-wide text-red-700 mt-1 field-error">Please enter a valid email address.</p>
             </div>
             <div>
-              <label class="block text-[10px] tracking-[0.18em] uppercase text-forest font-semibold mb-2">Phone</label>
-              <input type="tel" id="parentPhone" required pattern="\(\d{3}\)\s\d{3}-\d{4}" title="Please enter a valid 10-digit phone number" maxlength="14" class="w-full px-4 py-3 bg-cream border border-forest/15 text-sm text-charcoal placeholder:text-stone-light font-light" placeholder="(555) 123-4567">
-              <p class="hidden text-[10px] tracking-wide text-red-700 mt-1 field-error">Please enter a valid phone number (at least 10 digits).</p>
+              <label class="block text-[10px] tracking-[0.18em] uppercase text-forest font-semibold mb-2">Phone <span class="text-stone font-light normal-case tracking-normal">(optional)</span></label>
+              <input type="tel" id="parentPhone" pattern="\(\d{3}\)\s\d{3}-\d{4}" title="Please enter a valid 10-digit phone number or leave blank" maxlength="14" class="w-full px-4 py-3 bg-cream border border-forest/15 text-sm text-charcoal placeholder:text-stone-light font-light" placeholder="(555) 123-4567">
+              <p class="hidden text-[10px] tracking-wide text-red-700 mt-1 field-error">Please enter a valid phone number (10 digits) or leave blank.</p>
             </div>
           </div>
 
@@ -2044,9 +2044,10 @@
       const email = document.getElementById('parentEmail');
       if (!email.value.trim() || !email.validity.valid) showError(email);
 
-      // Phone — must be fully formatted (XXX) XXX-XXXX = 10 digits
+      // Phone — optional, but if entered must be complete (10 digits)
       const phone = document.getElementById('parentPhone');
-      if (countDigits(phone.value) !== 10) showError(phone);
+      const phoneDigits = countDigits(phone.value);
+      if (phoneDigits > 0 && phoneDigits !== 10) showError(phone);
 
       // Age
       const age = signupForm.querySelector('select[required]');
