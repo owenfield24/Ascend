@@ -579,6 +579,21 @@
       outline: 2px solid rgba(191, 167, 106, 0.7);
       outline-offset: 4px;
     }
+    /* Bio clamps to roughly one paragraph with ellipsis */
+    .instructor-card-trigger .bio-clamp {
+      display: -webkit-box;
+      -webkit-line-clamp: 3;
+      line-clamp: 3;
+      -webkit-box-orient: vertical;
+      overflow: hidden;
+      text-overflow: ellipsis;
+    }
+    @media (min-width: 768px) {
+      .instructor-card-trigger .bio-clamp {
+        -webkit-line-clamp: 4;
+        line-clamp: 4;
+      }
+    }
 
     /* Week card hover */
     .week-card {
@@ -894,7 +909,7 @@
       <!-- Two-column body for elegant readability -->
       <div class="grid md:grid-cols-2 gap-10 lg:gap-16 max-w-3xl mx-auto mb-20 md:mb-24 text-left reveal" style="transition-delay: 0.15s;">
         <p class="text-cream/65 text-[15px] md:text-base font-light leading-[1.85]">
-          Ascend is a private summer golf camp based in <span class="text-champagne">San Diego, California</span>, run by three college students — including a current collegiate golfer at Northwestern. We meet every camper where they are, with small groups, real instruction, and a relaxed setting kids actually enjoy.
+          Ascend is a private summer golf camp based in <span class="text-champagne">San Diego, California</span>, led by a team of current collegiate players. Between them the staff brings <span class="text-champagne">All-Pac-12 honors</span>, <span class="text-champagne">four-time Rolex All-American</span> selections, a <span class="text-champagne">U.S. Amateur</span> qualification, and <span class="text-champagne">NCAA Regional</span> experience. We meet every camper where they are, with small groups, real instruction, and a relaxed setting kids actually enjoy.
         </p>
         <p class="text-cream/65 text-[15px] md:text-base font-light leading-[1.85]">
           Sessions run Wednesday through Friday across the summer, from late May through mid August. No experience required.
@@ -1338,7 +1353,7 @@
           Meet the <span class="text-champagne" style="font-style: italic;">Instructors.</span>
         </h2>
         <p class="text-cream/55 text-base md:text-lg mt-8 font-light leading-[1.8] max-w-xl mx-auto">
-          The three players running the camp this summer.
+          The players running the camp this summer.
         </p>
       </div>
 
@@ -1366,23 +1381,20 @@
               <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="#BFA76A" stroke-width="2" stroke-linecap="round"><path d="M22 10v6M2 10l10-5 10 5-10 5z"/><path d="M6 12v5c3 3 9 3 12 0v-5"/></svg>
               <div class="text-champagne text-[11px] tracking-[0.18em] uppercase font-semibold">Texas Christian University</div>
             </div>
-            <p class="text-cream/60 text-sm font-light leading-[1.85] mb-4">
-              Golf has been a huge part of my life since I was a kid. Long days on the range, junior tournaments most weekends, and a love for the game that hasn't faded.
-            </p>
-            <p class="text-cream/60 text-sm font-light leading-[1.85]">
-              Now studying at TCU, I love sharing what I've learned with kids of every level, whether they're picking up a club for the first time or already playing every weekend.
+            <p class="text-cream/60 text-sm font-light leading-[1.85] flex-1">
+              Golf has been a huge part of my life since I was a kid. Long days on the range, junior tournaments most weekends, and a love for the game that hasn't faded. I grew up playing junior circuits, sharpened my game through high school varsity, and chased every round I could find to get a little better each week<span class="text-cream/40">...</span>
             </p>
           </div>
         </div>
 
-        <!-- ───── Instructor 2: Andres Cervera ───── -->
-        <div class="instructor-card-trigger group bg-cream/[0.04] backdrop-blur-sm border border-champagne/15 hover:border-champagne/40 overflow-hidden flex flex-col transition-all duration-500 hover:bg-cream/[0.06]" role="button" tabindex="0" data-instructor="andres" aria-label="View more about Andres Cervera">
+        <!-- ───── Instructor 2: Jackson Rivera ───── -->
+        <div class="instructor-card-trigger group bg-cream/[0.04] backdrop-blur-sm border border-champagne/15 hover:border-champagne/40 overflow-hidden flex flex-col transition-all duration-500 hover:bg-cream/[0.06]" role="button" tabindex="0" data-instructor="jackson" aria-label="View more about Jackson Rivera">
           <div class="relative aspect-[4/5] bg-gradient-to-br from-[#1A2B1E] via-[#142218] to-[#0A140D] overflow-hidden">
-            <img src="assets/andres.jpg" alt="Andres Cervera on the course" class="absolute inset-0 w-full h-full object-contain object-center" loading="lazy"/>
+            <img src="assets/jackson.jpg" alt="Jackson Rivera on the course" class="absolute inset-0 w-full h-full object-cover object-center" loading="lazy"/>
             <div class="absolute inset-x-0 bottom-0 h-24 bg-gradient-to-t from-[#0A0E0B] via-[#0A0E0B]/85 to-transparent"></div>
             <div class="absolute bottom-5 left-6 right-6">
               <span class="text-champagne text-[9px] tracking-[0.3em] uppercase font-semibold block mb-1">Instructor</span>
-              <h3 class="font-display text-xl lg:text-2xl text-cream font-semibold tracking-[-0.01em]">Andres Cervera</h3>
+              <h3 class="font-display text-xl lg:text-2xl text-cream font-semibold tracking-[-0.01em]">Jackson Rivera</h3>
             </div>
             <div class="absolute top-0 left-0 right-0 h-px bg-gradient-to-r from-transparent via-champagne/40 to-transparent"></div>
           </div>
@@ -1390,13 +1402,10 @@
           <div class="p-8 lg:p-10 flex-1 flex flex-col">
             <div class="flex items-center gap-2 mb-5">
               <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="#BFA76A" stroke-width="2" stroke-linecap="round"><path d="M22 10v6M2 10l10-5 10 5-10 5z"/><path d="M6 12v5c3 3 9 3 12 0v-5"/></svg>
-              <div class="text-champagne text-[11px] tracking-[0.18em] uppercase font-semibold">University of Chicago</div>
+              <div class="text-champagne text-[11px] tracking-[0.18em] uppercase font-semibold">University of Colorado Boulder</div>
             </div>
-            <p class="text-cream/60 text-sm font-light leading-[1.85] mb-4">
-              Golf is as much a thinking game as a physical one, and that's what pulled me in. At U Chicago I love breaking down the game in a way that makes sense for any player, no matter their experience.
-            </p>
-            <p class="text-cream/60 text-sm font-light leading-[1.85]">
-              Whether a kid is here to compete or just to enjoy a few days outside, I want them to leave loving the game a little more than when they arrived.
+            <p class="text-cream/60 text-sm font-light leading-[1.85] flex-1">
+              I grew up in San Diego and played at Torrey Pines High School, where I earned Rolex All-American honors four times and finished 2020 as the #2 ranked junior golfer in California. I represented the U.S. at the Junior Open at St. Andrews and qualified for the 2021 U.S. Amateur<span class="text-cream/40">...</span>
             </p>
           </div>
         </div>
@@ -1418,14 +1427,44 @@
               <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="#BFA76A" stroke-width="2" stroke-linecap="round"><path d="M22 10v6M2 10l10-5 10 5-10 5z"/><path d="M6 12v5c3 3 9 3 12 0v-5"/></svg>
               <div class="text-champagne text-[11px] tracking-[0.18em] uppercase font-semibold">Northwestern University</div>
             </div>
-            <p class="text-cream/60 text-sm font-light leading-[1.85] mb-4">
-              I play on the Northwestern golf team, and competing at the collegiate level keeps me sharp every single day. There's no shortcut. It's reps, focus, and showing up.
-            </p>
-            <p class="text-cream/60 text-sm font-light leading-[1.85]">
-              Teaching young golfers is something I genuinely look forward to. Watching a swing click, or a kid finally trust their putt, that's the best part of the day.
+            <p class="text-cream/60 text-sm font-light leading-[1.85] flex-1">
+              I play with the Northwestern golf team, and competing at the collegiate level keeps me sharp every single day. There's no shortcut. It's reps, focus, and showing up. Before Northwestern I put in the hours through junior tournaments and high school varsity, building the foundation that got me here and the habits that keep me improving<span class="text-cream/40">...</span>
             </p>
           </div>
         </div>
+      </div>
+
+      <!-- ───── Additional instructors (hidden by default) ───── -->
+      <div id="moreInstructors" class="hidden grid md:grid-cols-3 gap-6 lg:gap-8 mt-6 lg:mt-8">
+        <!-- Andres Cervera -->
+        <div class="instructor-card-trigger group bg-cream/[0.04] backdrop-blur-sm border border-champagne/15 hover:border-champagne/40 overflow-hidden flex flex-col transition-all duration-500 hover:bg-cream/[0.06]" role="button" tabindex="0" data-instructor="andres" aria-label="View more about Andres Cervera">
+          <div class="relative aspect-[4/5] bg-gradient-to-br from-[#1A2B1E] via-[#142218] to-[#0A140D] overflow-hidden">
+            <img src="assets/andres.jpg" alt="Andres Cervera on the course" class="absolute inset-0 w-full h-full object-contain object-center" loading="lazy"/>
+            <div class="absolute inset-x-0 bottom-0 h-24 bg-gradient-to-t from-[#0A0E0B] via-[#0A0E0B]/85 to-transparent"></div>
+            <div class="absolute bottom-5 left-6 right-6">
+              <span class="text-champagne text-[9px] tracking-[0.3em] uppercase font-semibold block mb-1">Instructor</span>
+              <h3 class="font-display text-xl lg:text-2xl text-cream font-semibold tracking-[-0.01em]">Andres Cervera</h3>
+            </div>
+            <div class="absolute top-0 left-0 right-0 h-px bg-gradient-to-r from-transparent via-champagne/40 to-transparent"></div>
+          </div>
+          <div class="p-8 lg:p-10 flex-1 flex flex-col">
+            <div class="flex items-center gap-2 mb-5">
+              <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="#BFA76A" stroke-width="2" stroke-linecap="round"><path d="M22 10v6M2 10l10-5 10 5-10 5z"/><path d="M6 12v5c3 3 9 3 12 0v-5"/></svg>
+              <div class="text-champagne text-[11px] tracking-[0.18em] uppercase font-semibold">University of Chicago</div>
+            </div>
+            <p class="text-cream/60 text-sm font-light leading-[1.85] flex-1">
+              Golf is as much a thinking game as a physical one, and that's what pulled me in. At U Chicago I love breaking down the game in a way that makes sense for any player, no matter their experience. Before college I grew up in the junior ranks, playing local and regional events through high school and falling in love with the craft of getting a little sharper every round<span class="text-cream/40">...</span>
+            </p>
+          </div>
+        </div>
+      </div>
+
+      <!-- Show more / show less toggle -->
+      <div class="text-center mt-10">
+        <button type="button" id="toggleMoreInstructors" class="group inline-flex items-center gap-2 text-champagne text-[11px] tracking-[0.3em] uppercase font-semibold hover:text-cream transition-colors duration-300">
+          <span class="toggle-label">Load More Instructors</span>
+          <svg class="toggle-chevron w-3 h-3 transition-transform duration-300" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path d="M6 9l6 6 6-6"/></svg>
+        </button>
       </div>
     </div>
   </section>
@@ -2169,7 +2208,7 @@
         school: 'Texas Christian University',
         photo: 'assets/owen.jpg',
         bio: [
-          "Golf has been a huge part of my life since I was a kid. Long days on the range, junior tournaments most weekends, and a love for the game that hasn't faded.",
+          "Golf has been a huge part of my life since I was a kid. Long days on the range, junior tournaments most weekends, and a love for the game that hasn't faded. I grew up playing junior circuits, sharpened my game through high school varsity, and chased every round I could find to get a little better each week.",
           "Now studying at TCU, I love sharing what I've learned with kids of every level, whether they're picking up a club for the first time or already playing every weekend.",
           "When I teach, I focus on building a swing kids can actually trust under pressure, not just one that looks good on the range. Fundamentals first, then we have fun with it."
         ],
@@ -2180,12 +2219,28 @@
           { label: 'Teaches', value: 'All ages & levels' }
         ]
       },
+      jackson: {
+        name: 'Jackson Rivera',
+        school: 'University of Colorado Boulder',
+        photo: 'assets/jackson.jpg',
+        bio: [
+          "I grew up in San Diego and played at Torrey Pines High School, where I earned Rolex All-American honors four times and finished 2020 as the #2 ranked junior golfer in California. I represented the U.S. at the Junior Open at St. Andrews and qualified for the 2021 U.S. Amateur.",
+          "At USC I earned All-Pac-12 Second Team and Pac-12 All-Freshman honors as a freshman, leading the team in 8 of 11 events with a team-best stroke average of 71.88. I tied for sixth at the Pac-12 Championships and qualified for the NCAA Regional that year.",
+          "I'm now a graduate transfer at the University of Colorado Boulder, still competing at the collegiate level. Coaching juniors is something I genuinely love. Walking through course management, the mental game, and the fundamentals that actually hold up under pressure."
+        ],
+        details: [
+          { label: 'Hometown', value: 'San Diego, CA' },
+          { label: 'High School', value: 'Torrey Pines' },
+          { label: 'Studies', value: 'USC → CU Boulder' },
+          { label: 'Specialty', value: 'Tournament prep' }
+        ]
+      },
       andres: {
         name: 'Andres Cervera',
         school: 'University of Chicago',
         photo: 'assets/andres.jpg',
         bio: [
-          "Golf is as much a thinking game as a physical one, and that's what pulled me in. At U Chicago I love breaking down the game in a way that makes sense for any player, no matter their experience.",
+          "Golf is as much a thinking game as a physical one, and that's what pulled me in. At U Chicago I love breaking down the game in a way that makes sense for any player, no matter their experience. Before college I grew up in the junior ranks, playing local and regional events through high school and falling in love with the craft of getting a little sharper every round.",
           "Whether a kid is here to compete or just to enjoy a few days outside, I want them to leave loving the game a little more than when they arrived.",
           "I lean into the mental side: course management, decision-making, and staying calm when a shot doesn't go your way. The best lessons usually come from the worst swings."
         ],
@@ -2201,7 +2256,7 @@
         school: 'Northwestern University',
         photo: 'assets/will.jpg',
         bio: [
-          "I play on the Northwestern golf team, and competing at the collegiate level keeps me sharp every single day. There's no shortcut. It's reps, focus, and showing up.",
+          "I play with the Northwestern golf team, and competing at the collegiate level keeps me sharp every single day. There's no shortcut. It's reps, focus, and showing up. Before Northwestern I put in the hours through junior tournaments and high school varsity, building the foundation that got me here and the habits that keep me improving.",
           "Teaching young golfers is something I genuinely look forward to. Watching a swing click, or a kid finally trust their putt, that's the best part of the day.",
           "I love working on the short game: chipping, putting, the stuff that actually drops your scores. Get those dialed in and the rest of your game starts to feel a lot easier."
         ],
@@ -2256,6 +2311,26 @@
         }
       });
     });
+
+    // Toggle "Load More Instructors"
+    const moreInstructors = document.getElementById('moreInstructors');
+    const toggleBtn = document.getElementById('toggleMoreInstructors');
+    if (toggleBtn && moreInstructors) {
+      toggleBtn.addEventListener('click', () => {
+        const isHidden = moreInstructors.classList.contains('hidden');
+        if (isHidden) {
+          moreInstructors.classList.remove('hidden');
+          moreInstructors.classList.add('grid');
+          toggleBtn.querySelector('.toggle-label').textContent = 'Show Less';
+          toggleBtn.querySelector('.toggle-chevron').style.transform = 'rotate(180deg)';
+        } else {
+          moreInstructors.classList.add('hidden');
+          moreInstructors.classList.remove('grid');
+          toggleBtn.querySelector('.toggle-label').textContent = 'Load More Instructors';
+          toggleBtn.querySelector('.toggle-chevron').style.transform = 'rotate(0deg)';
+        }
+      });
+    }
     document.querySelectorAll('[data-close-instructor]').forEach(el => {
       el.addEventListener('click', (e) => { e.preventDefault(); closeInstructor(); });
     });
