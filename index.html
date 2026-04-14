@@ -9,6 +9,12 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <meta http-equiv="X-UA-Compatible" content="IE=edge">
 
+  <!-- ─── Performance: resource hints ─── -->
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link rel="preconnect" href="https://cdn.tailwindcss.com">
+  <link rel="dns-prefetch" href="https://placehold.co">
+
   <!-- ─── Primary SEO ─── -->
   <title>Ascend Golf Camp — Junior Golf Camp in San Diego, California</title>
   <meta name="description" content="Ascend Golf Camp is a private summer junior golf camp in San Diego, California, run by three college students. Three-day mid-week sessions Wednesday through Friday, late May through mid August. All skill levels welcome.">
@@ -459,10 +465,37 @@
       }
     }
 
-    /* Promote the drift-animated clouds to their own GPU layers */
+    /* GPU layer hint only for actively-animating clouds */
     .liquid-a, .liquid-b, .liquid-c,
     .liquid-slow-a, .liquid-slow-b, .liquid-slow-c {
       will-change: transform;
+      transform: translateZ(0);
+    }
+
+    /* Skip layout/paint for offscreen sections — massive performance win.
+       Browsers render sections only when they scroll near the viewport. */
+    #about, #camps, #instructors, footer {
+      content-visibility: auto;
+      contain-intrinsic-size: 1px 1000px;
+    }
+
+    /* Prevent layout thrash — hint browser to isolate expensive subtrees */
+    .instructor-card-trigger,
+    .week-card {
+      contain: layout paint;
+    }
+
+    /* Reduce paint on scroll */
+    html {
+      text-rendering: optimizeSpeed;
+    }
+    h1, h2, h3, .font-display {
+      text-rendering: optimizeLegibility;
+    }
+
+    /* Images load smoother with no layout shift */
+    img {
+      content-visibility: auto;
     }
 
     /* ─── Selection styling ─── */
@@ -1388,7 +1421,7 @@
         <div class="md:col-span-2 instructor-card-trigger group bg-cream/[0.04] backdrop-blur-sm border border-champagne/15 hover:border-champagne/40 overflow-hidden flex flex-col transition-all duration-500 hover:bg-cream/[0.06]" role="button" tabindex="0" data-instructor="owen" aria-label="View more about Owen Field">
           <!-- Photo area: 4:5 portrait -->
           <div class="relative aspect-[4/5] bg-gradient-to-br from-[#1A2B1E] via-[#142218] to-[#0A140D] overflow-hidden">
-            <img src="assets/owen.jpg" alt="Owen Field on the course" class="absolute inset-0 w-full h-full object-cover object-top" loading="lazy"/>
+            <img src="assets/owen.jpg" alt="Owen Field on the course" class="absolute inset-0 w-full h-full object-cover object-top" loading="lazy" decoding="async"/>
             <!-- Bottom gradient + name -->
             <div class="absolute inset-x-0 bottom-0 h-28 bg-gradient-to-t from-[#0A0E0B] via-[#0A0E0B]/90 to-transparent"></div>
             <div class="absolute bottom-5 left-6 right-6">
@@ -1414,7 +1447,7 @@
         <!-- ───── Instructor 2: Jackson Rivera ───── -->
         <div class="md:col-span-2 instructor-card-trigger group bg-cream/[0.04] backdrop-blur-sm border border-champagne/15 hover:border-champagne/40 overflow-hidden flex flex-col transition-all duration-500 hover:bg-cream/[0.06]" role="button" tabindex="0" data-instructor="jackson" aria-label="View more about Jackson Rivera">
           <div class="relative aspect-[4/5] bg-gradient-to-br from-[#1A2B1E] via-[#142218] to-[#0A140D] overflow-hidden">
-            <img src="assets/jackson.jpg" alt="Jackson Rivera on the course" class="absolute inset-0 w-full h-full object-cover object-center" loading="lazy"/>
+            <img src="assets/jackson.jpg" alt="Jackson Rivera on the course" class="absolute inset-0 w-full h-full object-cover object-center" loading="lazy" decoding="async"/>
             <div class="absolute inset-x-0 bottom-0 h-24 bg-gradient-to-t from-[#0A0E0B] via-[#0A0E0B]/85 to-transparent"></div>
             <div class="absolute bottom-5 left-6 right-6">
               <span class="text-champagne text-[9px] tracking-[0.3em] uppercase font-semibold block mb-1">Instructor</span>
@@ -1437,7 +1470,7 @@
         <!-- ───── Instructor 3: William Mirhashemi ───── -->
         <div class="md:col-span-2 instructor-card-trigger group bg-cream/[0.04] backdrop-blur-sm border border-champagne/15 hover:border-champagne/40 overflow-hidden flex flex-col transition-all duration-500 hover:bg-cream/[0.06]" role="button" tabindex="0" data-instructor="william" aria-label="View more about William Mirhashemi">
           <div class="relative aspect-[4/5] bg-gradient-to-br from-[#1A2B1E] via-[#142218] to-[#0A140D] overflow-hidden">
-            <img src="assets/will.jpg" alt="William Mirhashemi on the course" class="absolute inset-0 w-full h-full object-cover object-center" loading="lazy"/>
+            <img src="assets/will.jpg" alt="William Mirhashemi on the course" class="absolute inset-0 w-full h-full object-cover object-center" loading="lazy" decoding="async"/>
             <div class="absolute inset-x-0 bottom-0 h-24 bg-gradient-to-t from-[#0A0E0B] via-[#0A0E0B]/85 to-transparent"></div>
             <div class="absolute bottom-5 left-6 right-6">
               <span class="text-champagne text-[9px] tracking-[0.3em] uppercase font-semibold block mb-1">Instructor</span>
@@ -1463,7 +1496,7 @@
         <!-- Andres Cervera — offset to sit half under Jackson, half under Will -->
         <div class="md:col-start-4 md:col-span-2 instructor-card-trigger group bg-cream/[0.04] backdrop-blur-sm border border-champagne/15 hover:border-champagne/40 overflow-hidden flex flex-col transition-all duration-500 hover:bg-cream/[0.06]" role="button" tabindex="0" data-instructor="andres" aria-label="View more about Andres Cervera">
           <div class="relative aspect-[4/5] bg-gradient-to-br from-[#1A2B1E] via-[#142218] to-[#0A140D] overflow-hidden">
-            <img src="assets/andres.jpg" alt="Andres Cervera on the course" class="absolute inset-0 w-full h-full object-cover object-top" loading="lazy"/>
+            <img src="assets/andres.jpg" alt="Andres Cervera on the course" class="absolute inset-0 w-full h-full object-cover object-top" loading="lazy" decoding="async"/>
             <div class="absolute inset-x-0 bottom-0 h-24 bg-gradient-to-t from-[#0A0E0B] via-[#0A0E0B]/85 to-transparent"></div>
             <div class="absolute bottom-5 left-6 right-6">
               <span class="text-champagne text-[9px] tracking-[0.3em] uppercase font-semibold block mb-1">Instructor</span>
@@ -1485,7 +1518,7 @@
         <!-- Gavin Plewes — offset to sit half under Owen, half under Jackson -->
         <div class="md:col-start-2 md:col-span-2 instructor-card-trigger group bg-cream/[0.04] backdrop-blur-sm border border-champagne/15 hover:border-champagne/40 overflow-hidden flex flex-col transition-all duration-500 hover:bg-cream/[0.06]" role="button" tabindex="0" data-instructor="gavin" aria-label="View more about Gavin Plewes">
           <div class="relative aspect-[4/5] bg-gradient-to-br from-[#1A2B1E] via-[#142218] to-[#0A140D] overflow-hidden">
-            <img src="https://placehold.co/800x1000/1A2B1E/BFA76A?text=Gavin+Plewes" alt="Gavin Plewes on the course" class="absolute inset-0 w-full h-full object-cover object-top" loading="lazy"/>
+            <img src="https://placehold.co/800x1000/1A2B1E/BFA76A?text=Gavin+Plewes" alt="Gavin Plewes on the course" class="absolute inset-0 w-full h-full object-cover object-top" loading="lazy" decoding="async"/>
             <div class="absolute inset-x-0 bottom-0 h-24 bg-gradient-to-t from-[#0A0E0B] via-[#0A0E0B]/85 to-transparent"></div>
             <div class="absolute bottom-5 left-6 right-6">
               <span class="text-champagne text-[9px] tracking-[0.3em] uppercase font-semibold block mb-1">Instructor</span>
@@ -2400,17 +2433,20 @@
       if (e.key === 'Escape' && instructorModal.classList.contains('is-open')) closeInstructor();
     });
 
-    // Scroll reveal
+    // Scroll reveal — reduced threshold + disconnect when all revealed
     const reveals = document.querySelectorAll('.reveal');
-    const observer = new IntersectionObserver((entries) => {
-      entries.forEach(entry => {
+    let revealed = 0;
+    const revealObserver = new IntersectionObserver((entries) => {
+      for (const entry of entries) {
         if (entry.isIntersecting) {
           entry.target.classList.add('visible');
-          observer.unobserve(entry.target);
+          revealObserver.unobserve(entry.target);
+          revealed++;
         }
-      });
-    }, { threshold: 0.12, rootMargin: '0px 0px -50px 0px' });
-    reveals.forEach(el => observer.observe(el));
+      }
+      if (revealed >= reveals.length) revealObserver.disconnect();
+    }, { threshold: 0.08, rootMargin: '0px 0px -80px 0px' });
+    reveals.forEach(el => revealObserver.observe(el));
   </script>
 </body>
 </html>
