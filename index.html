@@ -261,7 +261,13 @@
     }
 
     /* Scrolled (over light sections) */
-    #navbar.scrolled { color: #000000; }
+    #navbar.scrolled {
+      color: #000000;
+      background: rgba(247, 245, 239, 0.96);
+      backdrop-filter: blur(14px);
+      -webkit-backdrop-filter: blur(14px);
+      border-bottom: 1px solid rgba(31, 93, 46, 0.1);
+    }
     #navbar.scrolled #navLogo { color: #000000; }
     #navbar.scrolled #navWord { color: #000000; }
     #navbar.scrolled #navSub  { color: #000000; }
@@ -434,6 +440,29 @@
         transition-duration: 0.4s !important;
       }
       html { scroll-behavior: auto; }
+    }
+
+    /* ─── Mobile performance: drop heavy effects on phones ─── */
+    @media (max-width: 768px) {
+      .liquid-a, .liquid-b, .liquid-c,
+      .liquid-slow-a, .liquid-slow-b, .liquid-slow-c {
+        animation: none !important;
+      }
+      #navbar.scrolled {
+        backdrop-filter: blur(6px);
+        -webkit-backdrop-filter: blur(6px);
+      }
+      #signupModal .modal-backdrop,
+      #instructorModal .modal-backdrop {
+        backdrop-filter: blur(4px);
+        -webkit-backdrop-filter: blur(4px);
+      }
+    }
+
+    /* Promote the drift-animated clouds to their own GPU layers */
+    .liquid-a, .liquid-b, .liquid-c,
+    .liquid-slow-a, .liquid-slow-b, .liquid-slow-c {
+      will-change: transform;
     }
 
     /* ─── Selection styling ─── */
@@ -1884,20 +1913,19 @@
 
     // Navbar scroll: switch theme when leaving the dark hero
     const navbar = document.getElementById('navbar');
+    let navScrollTicking = false;
     const updateNav = () => {
-      if (window.scrollY > 60) {
-        navbar.classList.add('scrolled');
-        navbar.style.background = 'rgba(247, 245, 239, 0.96)';
-        navbar.style.backdropFilter = 'blur(14px)';
-        navbar.style.borderBottom = '1px solid rgba(31, 93, 46, 0.1)';
-      } else {
-        navbar.classList.remove('scrolled');
-        navbar.style.background = 'transparent';
-        navbar.style.backdropFilter = 'none';
-        navbar.style.borderBottom = 'none';
-      }
+      const scrolled = window.scrollY > 60;
+      if (scrolled) navbar.classList.add('scrolled');
+      else navbar.classList.remove('scrolled');
+      navScrollTicking = false;
     };
-    window.addEventListener('scroll', updateNav);
+    window.addEventListener('scroll', () => {
+      if (!navScrollTicking) {
+        requestAnimationFrame(updateNav);
+        navScrollTicking = true;
+      }
+    }, { passive: true });
     updateNav();
 
     // Mobile menu
