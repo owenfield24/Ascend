@@ -261,13 +261,13 @@
     }
 
     /* Scrolled (over light sections) */
-    #navbar.scrolled { color: #1F5D2E; }
+    #navbar.scrolled { color: #000000; }
     #navbar.scrolled #navLogo { color: #000000; }
-    #navbar.scrolled #navWord { color: #1F5D2E; }
-    #navbar.scrolled #navSub  { color: #6B6B6B; }
-    #navbar.scrolled #navMenuIcon { color: #1F5D2E; }
-    #navbar.scrolled .nav-link { color: rgba(26, 26, 26, 0.6); }
-    #navbar.scrolled .nav-link:hover { color: #1F5D2E; }
+    #navbar.scrolled #navWord { color: #000000; }
+    #navbar.scrolled #navSub  { color: #000000; }
+    #navbar.scrolled #navMenuIcon { color: #000000; }
+    #navbar.scrolled .nav-link { color: rgba(0, 0, 0, 0.65); }
+    #navbar.scrolled .nav-link:hover { color: #000000; }
     #navbar.scrolled #navCta {
       background: #1F5D2E;
       color: #F7F5EF;
@@ -576,15 +576,11 @@
   <!-- ═══════════════════════════════════════ -->
   <div id="loader" aria-hidden="true">
     <div id="loader-content" class="flex flex-col items-center">
-      <svg class="mb-8" width="78" height="88" viewBox="0 0 100 112" fill="none">
-        <!-- A as a single filled shape with evenodd counter cutout (stencil style) -->
+      <svg class="mb-8" width="78" height="88" viewBox="0 0 100 115" fill="none">
         <path d="M12 84 L50 20 L88 84 L78 84 L66 60 L33 62 L22 84 Z M50 28 L65 58 L34 60 Z" fill="#FFFFFF" fill-rule="evenodd"/>
-        <!-- Flagpole — thin, emerges from apex seamlessly -->
         <line x1="50" y1="20" x2="50" y2="4" stroke="#FFFFFF" stroke-width="2.2"/>
-        <!-- Right-pointing triangular pennant (15×12) -->
         <path d="M50 4 L62 8 L50 12 Z" fill="#FFFFFF"/>
-        <!-- Gentle rolling hill with upward bow in center -->
-        <path d="M-2 106 Q50 94, 102 106" stroke="#FFFFFF" stroke-width="3" stroke-linecap="round" fill="none"/>
+        <path d="M4 106 Q50 90 96 106 L96 112 Q50 98 4 112 Z" fill="#FFFFFF"/>
       </svg>
 
       <div id="loader-word" class="font-display text-white text-2xl md:text-3xl tracking-[0.25em] mb-3">ASCEND</div>
@@ -606,11 +602,11 @@
     <div class="max-w-7xl mx-auto px-6 lg:px-12 py-5 flex items-center justify-between">
       <!-- Logo -->
       <a href="#" class="flex items-center gap-3 group" aria-label="Ascend Golf Camp Home">
-        <svg id="navLogo" width="30" height="34" viewBox="0 0 100 112" fill="none" class="transition-transform duration-300 group-hover:scale-105">
+        <svg id="navLogo" width="34" height="40" viewBox="0 0 100 115" fill="none" class="transition-transform duration-300 group-hover:scale-105">
           <path d="M12 84 L50 20 L88 84 L78 84 L66 60 L33 62 L22 84 Z M50 28 L65 58 L34 60 Z" fill="currentColor" fill-rule="evenodd"/>
           <line x1="50" y1="20" x2="50" y2="4" stroke="currentColor" stroke-width="2.2"/>
           <path d="M50 4 L62 8 L50 12 Z" fill="currentColor"/>
-          <path d="M-2 106 Q50 94, 102 106" stroke="currentColor" stroke-width="3" stroke-linecap="round" fill="none"/>
+          <path d="M4 106 Q50 90 96 106 L96 112 Q50 98 4 112 Z" fill="currentColor"/>
         </svg>
         <div class="flex flex-col leading-none">
           <span id="navWord" class="font-display text-base font-semibold tracking-[0.18em]">ASCEND</span>
@@ -730,11 +726,11 @@
 
       <!-- Logo: large A flag mark in white -->
       <div class="mb-10 anim-fade-up d1">
-        <svg width="108" height="121" viewBox="0 0 100 112" fill="none">
+        <svg width="108" height="124" viewBox="0 0 100 115" fill="none">
           <path d="M12 84 L50 20 L88 84 L78 84 L66 60 L33 62 L22 84 Z M50 28 L65 58 L34 60 Z" fill="#FFFFFF" fill-rule="evenodd"/>
           <line x1="50" y1="20" x2="50" y2="4" stroke="#FFFFFF" stroke-width="2.2"/>
           <path d="M50 4 L62 8 L50 12 Z" fill="#FFFFFF"/>
-          <path d="M-2 106 Q50 94, 102 106" stroke="#FFFFFF" stroke-width="3" stroke-linecap="round" fill="none"/>
+          <path d="M4 106 Q50 90 96 106 L96 112 Q50 98 4 112 Z" fill="#FFFFFF"/>
         </svg>
       </div>
 
@@ -1821,11 +1817,11 @@
         <!-- Brand -->
         <div>
           <div class="flex items-center gap-3 mb-5">
-            <svg width="26" height="29" viewBox="0 0 100 112" fill="none">
+            <svg width="28" height="32" viewBox="0 0 100 115" fill="none">
               <path d="M12 84 L50 20 L88 84 L78 84 L66 60 L33 62 L22 84 Z M50 28 L65 58 L34 60 Z" fill="#BFA76A" fill-rule="evenodd"/>
               <line x1="50" y1="20" x2="50" y2="4" stroke="#BFA76A" stroke-width="2.2"/>
               <path d="M50 4 L62 8 L50 12 Z" fill="#BFA76A"/>
-              <path d="M-2 106 Q50 94, 102 106" stroke="#BFA76A" stroke-width="3" stroke-linecap="round" fill="none"/>
+              <path d="M4 106 Q50 90 96 106 L96 112 Q50 98 4 112 Z" fill="#BFA76A"/>
             </svg>
             <div class="flex flex-col leading-none">
               <span class="font-display text-sm font-semibold tracking-[0.18em] text-cream">ASCEND</span>
