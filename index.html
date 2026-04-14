@@ -1070,7 +1070,7 @@
             </div>
 
             <!-- Right: what's included -->
-            <div class="md:col-span-3 p-10 lg:p-12 bg-cream-light">
+            <div class="md:col-span-3 p-10 lg:p-12 bg-cream-light flex flex-col">
               <div class="flex items-baseline gap-3 mb-8">
                 <span class="font-display text-champagne text-sm">—</span>
                 <span class="text-forest text-[11px] tracking-[0.3em] uppercase font-semibold">What's Included</span>
@@ -1166,9 +1166,9 @@
                 </div>
               </div>
 
-              <!-- Centered CTA below the 8 tiles -->
-              <div class="text-center pt-10 border-t border-forest/10">
-                <button type="button" data-open-modal class="group inline-flex items-center px-14 py-5 bg-forest text-cream text-sm tracking-[0.28em] uppercase font-semibold btn-luxury hover:bg-forest-dark hover:shadow-[0_20px_50px_rgba(31,93,46,0.35)]">
+              <!-- CTA fills remaining space, button centered vertically between divider and card bottom -->
+              <div class="flex-1 flex items-center justify-center border-t border-forest/10 mt-2">
+                <button type="button" data-open-modal class="group inline-flex items-center justify-center w-full md:w-auto md:min-w-[340px] px-14 py-5 bg-forest text-cream text-sm tracking-[0.28em] uppercase font-semibold btn-luxury hover:bg-forest-dark hover:shadow-[0_22px_56px_rgba(31,93,46,0.4)]">
                   Reserve Your Spot
                   <svg class="ml-4 w-5 h-5 transition-transform duration-300 group-hover:translate-x-1" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path d="M5 12h14M12 5l7 7-7 7"/></svg>
                 </button>
@@ -1460,8 +1460,8 @@
 
       <!-- ───── Additional instructors (hidden by default) ───── -->
       <div id="moreInstructors" class="hidden grid md:grid-cols-6 gap-6 lg:gap-8 mt-6 lg:mt-8">
-        <!-- Andres Cervera — offset to sit half under Owen, half under Jackson -->
-        <div class="md:col-start-2 md:col-span-2 instructor-card-trigger group bg-cream/[0.04] backdrop-blur-sm border border-champagne/15 hover:border-champagne/40 overflow-hidden flex flex-col transition-all duration-500 hover:bg-cream/[0.06]" role="button" tabindex="0" data-instructor="andres" aria-label="View more about Andres Cervera">
+        <!-- Andres Cervera — offset to sit half under Jackson, half under Will -->
+        <div class="md:col-start-4 md:col-span-2 instructor-card-trigger group bg-cream/[0.04] backdrop-blur-sm border border-champagne/15 hover:border-champagne/40 overflow-hidden flex flex-col transition-all duration-500 hover:bg-cream/[0.06]" role="button" tabindex="0" data-instructor="andres" aria-label="View more about Andres Cervera">
           <div class="relative aspect-[4/5] bg-gradient-to-br from-[#1A2B1E] via-[#142218] to-[#0A140D] overflow-hidden">
             <img src="assets/andres.jpg" alt="Andres Cervera on the course" class="absolute inset-0 w-full h-full object-cover object-top" loading="lazy"/>
             <div class="absolute inset-x-0 bottom-0 h-24 bg-gradient-to-t from-[#0A0E0B] via-[#0A0E0B]/85 to-transparent"></div>
@@ -1482,8 +1482,8 @@
           </div>
         </div>
 
-        <!-- Gavin Plewes — offset to sit half under Jackson, half under Will -->
-        <div class="md:col-start-4 md:col-span-2 instructor-card-trigger group bg-cream/[0.04] backdrop-blur-sm border border-champagne/15 hover:border-champagne/40 overflow-hidden flex flex-col transition-all duration-500 hover:bg-cream/[0.06]" role="button" tabindex="0" data-instructor="gavin" aria-label="View more about Gavin Plewes">
+        <!-- Gavin Plewes — offset to sit half under Owen, half under Jackson -->
+        <div class="md:col-start-2 md:col-span-2 instructor-card-trigger group bg-cream/[0.04] backdrop-blur-sm border border-champagne/15 hover:border-champagne/40 overflow-hidden flex flex-col transition-all duration-500 hover:bg-cream/[0.06]" role="button" tabindex="0" data-instructor="gavin" aria-label="View more about Gavin Plewes">
           <div class="relative aspect-[4/5] bg-gradient-to-br from-[#1A2B1E] via-[#142218] to-[#0A140D] overflow-hidden">
             <img src="https://placehold.co/800x1000/1A2B1E/BFA76A?text=Gavin+Plewes" alt="Gavin Plewes on the course" class="absolute inset-0 w-full h-full object-cover object-top" loading="lazy"/>
             <div class="absolute inset-x-0 bottom-0 h-24 bg-gradient-to-t from-[#0A0E0B] via-[#0A0E0B]/85 to-transparent"></div>
