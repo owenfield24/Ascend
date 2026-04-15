@@ -1854,27 +1854,28 @@
             </div>
 
             <div class="grid sm:grid-cols-2 gap-3">
-              <!-- Online payment -->
-              <label class="relative flex items-start gap-3 p-4 border border-forest/15 bg-cream cursor-pointer hover:border-forest/40 hover:bg-forest/[0.03] transition-colors duration-200 has-[:checked]:border-forest has-[:checked]:bg-forest/[0.05]">
-                <input type="radio" name="payment" value="online" class="mt-1 accent-forest" required>
+              <!-- Online payment — disabled until Stripe is connected -->
+              <label class="relative flex items-start gap-3 p-4 border border-stone/15 bg-stone/[0.04] opacity-60 cursor-not-allowed">
+                <input type="radio" name="payment" value="online" class="mt-1 accent-forest" disabled>
                 <div class="flex-1">
                   <div class="flex items-center gap-2 mb-1">
-                    <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="#1F5D2E" stroke-width="1.8" stroke-linecap="round"><rect x="2" y="5" width="20" height="14" rx="2"/><line x1="2" y1="10" x2="22" y2="10"/></svg>
-                    <span class="text-forest text-[11px] tracking-[0.15em] uppercase font-semibold">Pay Online</span>
+                    <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="#6B6B6B" stroke-width="1.8" stroke-linecap="round"><rect x="2" y="5" width="20" height="14" rx="2"/><line x1="2" y1="10" x2="22" y2="10"/></svg>
+                    <span class="text-stone text-[11px] tracking-[0.15em] uppercase font-semibold">Pay Online</span>
+                    <span class="ml-1 text-[8px] tracking-[0.22em] uppercase font-semibold text-champagne-dark bg-champagne/15 border border-champagne/30 px-1.5 py-0.5">Coming Soon</span>
                   </div>
-                  <div class="text-stone text-[11px] font-light leading-[1.6]">Reserve your spot now with a secure online payment.</div>
+                  <div class="text-stone text-[11px] font-light leading-[1.6]">Secure online payment launching soon.</div>
                 </div>
               </label>
 
-              <!-- Pay at drop-off -->
-              <label class="relative flex items-start gap-3 p-4 border border-forest/15 bg-cream cursor-pointer hover:border-forest/40 hover:bg-forest/[0.03] transition-colors duration-200 has-[:checked]:border-forest has-[:checked]:bg-forest/[0.05]">
-                <input type="radio" name="payment" value="dropoff" class="mt-1 accent-forest" required>
+              <!-- Pay at drop-off — highlighted red as the active option -->
+              <label class="relative flex items-start gap-3 p-4 border-2 border-red-500 bg-red-50 cursor-pointer hover:bg-red-100 transition-colors duration-200 has-[:checked]:border-red-600 has-[:checked]:bg-red-100">
+                <input type="radio" name="payment" value="dropoff" class="mt-1 accent-red-600" required>
                 <div class="flex-1">
                   <div class="flex items-center gap-2 mb-1">
-                    <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="#1F5D2E" stroke-width="1.8" stroke-linecap="round"><circle cx="12" cy="12" r="9"/><path d="M12 6v6l4 2"/></svg>
-                    <span class="text-forest text-[11px] tracking-[0.15em] uppercase font-semibold">Pay at Drop-Off</span>
+                    <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="#DC2626" stroke-width="1.8" stroke-linecap="round"><circle cx="12" cy="12" r="9"/><path d="M12 6v6l4 2"/></svg>
+                    <span class="text-red-700 text-[11px] tracking-[0.15em] uppercase font-semibold">Pay at Drop-Off</span>
                   </div>
-                  <div class="text-stone text-[11px] font-light leading-[1.6]">Bring payment in person on the first day of camp.</div>
+                  <div class="text-red-700/80 text-[11px] font-light leading-[1.6]">Bring payment in person on the first day of camp.</div>
                 </div>
               </label>
             </div>
@@ -2278,7 +2279,7 @@
       };
 
       // Replace APPS_SCRIPT_URL with the Web App URL from your Apps Script deployment
-      const APPS_SCRIPT_URL = 'https://script.google.com/macros/s/AKfycbxDq_nsKbjsY9rgSwXB81ubndq2hJGBfjmmeevJuF7wcHuP7wlHHIYKu8Fn0A9-orYpDg/exec';
+      const APPS_SCRIPT_URL = 'https://script.google.com/macros/s/AKfycbyYXkvIST_wBwIj9yu8DafcyP8uMk2K_-hMx-xO7s86cMA9brPPjZZg6Fyi7qHHRQYUoQ/exec';
 
       fetch(APPS_SCRIPT_URL, {
         method: 'POST',
