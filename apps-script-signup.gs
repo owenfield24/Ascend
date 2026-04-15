@@ -100,6 +100,11 @@ function doPost(e) {
 
     // ─── Master "Reservations" overview tab — one row per week selected ───
     const masterSheet = getOrCreateSheet(ss, MASTER_SHEET, '#1F5D2E');
+    // Pin Reservations tab to the far left so it's always the first tab
+    if (ss.getSheets()[0].getName() !== MASTER_SHEET) {
+      ss.setActiveSheet(masterSheet);
+      ss.moveActiveSheet(1);
+    }
     data.weeks.forEach(function (weekFull) {
       const weekKey = extractWeekKey(weekFull);
       const weekColor = WEEK_COLORS[weekKey] || FALLBACK_COLOR;
@@ -160,18 +165,28 @@ function getOrCreateSheet(ss, name, tabColor) {
   let sheet = ss.getSheetByName(name);
   if (!sheet) {
     sheet = ss.insertSheet(name);
-    sheet.appendRow(HEADERS);
-    sheet.getRange(1, 1, 1, HEADERS.length)
-      .setFontWeight('bold')
-      .setBackground('#1F5D2E')
-      .setFontColor('#FFFFFF');
+    writeHeaderRow(sheet);
     sheet.setFrozenRows(1);
-    // Auto-size the timestamp + week columns
     sheet.setColumnWidth(1, 160);
     sheet.setColumnWidth(2, 110);
     if (tabColor) sheet.setTabColor(tabColor);
+  } else {
+    // Sheet exists — verify header row matches expected HEADERS.
+    // If anything drifted, rewrite row 1 so new data lands in the right columns.
+    const currentHeaderRow = sheet.getRange(1, 1, 1, HEADERS.length).getValues()[0];
+    const matches = HEADERS.every(function (h, i) { return currentHeaderRow[i] === h; });
+    if (!matches) writeHeaderRow(sheet);
+    if (tabColor) sheet.setTabColor(tabColor);
   }
   return sheet;
+}
+
+function writeHeaderRow(sheet) {
+  sheet.getRange(1, 1, 1, HEADERS.length).setValues([HEADERS]);
+  sheet.getRange(1, 1, 1, HEADERS.length)
+    .setFontWeight('bold')
+    .setBackground('#1F5D2E')
+    .setFontColor('#FFFFFF');
 }
 
 function buildRow(d, weekFull, total, timestamp) {
@@ -213,7 +228,7 @@ function row(label, value) {
 }
 
 function buildEmailHtml(d, total, timestamp) {
-  const weeksHtml = d.weeks.map(function (w) { return '• ' + htmlEscape(w); }).join('<br>');
+  const weeksHtml = d.weeks.map(function (w) { return '• ' + escape(w); }).join('<br>');
   const paymentLabel = d.payment === 'online' ? 'Paid Online' : (d.payment === 'dropoff' ? 'Pay at Drop-Off' : (d.payment || ''));
 
   return (

@@ -17,7 +17,7 @@
 
   <!-- ─── Primary SEO ─── -->
   <title>Ascend Golf Camp — Junior Golf Camp in San Diego, California</title>
-  <meta name="description" content="Ascend Golf Camp is a private summer junior golf camp in San Diego, California, run by three college students. Three-day mid-week sessions Wednesday through Friday, late May through mid August. All skill levels welcome.">
+  <meta name="description" content="Ascend Golf Camp is a private summer junior golf camp in San Diego, California, run by a team of college and high-school golfers. Three-day mid-week sessions Wednesday through Friday, late May through mid August. All skill levels welcome.">
   <meta name="keywords" content="junior golf camp, San Diego golf camp, summer golf camp, kids golf lessons, junior golf instruction, beginner golf camp, San Diego junior golf, golf summer camp California, college golf instructors, Ascend Golf Camp">
   <meta name="author" content="Ascend Golf Camp">
   <meta name="robots" content="index, follow, max-image-preview:large">
@@ -61,7 +61,7 @@
     "@id": "https://ascendgolfcamp.com/#organization",
     "name": "Ascend Golf Camp",
     "alternateName": "Ascend",
-    "description": "A private summer junior golf camp in San Diego, California. Three-day mid-week sessions Wednesday through Friday, late May through mid August. Run by three college students who love the game. All skill levels welcome.",
+    "description": "A private summer junior golf camp in San Diego, California. Three-day mid-week sessions Wednesday through Friday, late May through mid August. Run by a team of college and high-school golfers who love the game. All skill levels welcome.",
     "url": "https://ascendgolfcamp.com/",
     "image": "https://ascendgolfcamp.com/og-image.jpg",
     "logo": "https://ascendgolfcamp.com/logo.svg",
@@ -197,12 +197,59 @@
     /* ─── Signup form locked state during submission ─── */
     #signupForm.submitting {
       pointer-events: none;
-      opacity: 0.65;
-      transition: opacity 0.25s ease;
+      opacity: 0.55;
+      transition: opacity 0.4s ease;
     }
     #signupForm.submitting button[type=submit] {
       opacity: 1;
       cursor: progress;
+      position: relative;
+      overflow: hidden;
+    }
+
+    /* Champagne shimmer sweep across the submit button while loading */
+    #signupForm.submitting button[type=submit]::before {
+      content: '';
+      position: absolute;
+      inset: 0;
+      background: linear-gradient(110deg,
+        transparent 0%,
+        transparent 35%,
+        rgba(191, 167, 106, 0.55) 50%,
+        transparent 65%,
+        transparent 100%);
+      background-size: 240% 100%;
+      background-position: 100% 0;
+      animation: btn-shimmer 1s linear infinite;
+      pointer-events: none;
+    }
+
+    @keyframes btn-shimmer {
+      0%   { background-position: 130% 0; }
+      100% { background-position: -30% 0; }
+    }
+
+    /* Fast three-dot loader */
+    .submit-loading {
+      display: inline-flex;
+      align-items: center;
+      gap: 10px;
+      letter-spacing: 0.28em;
+    }
+    .submit-loading .dot {
+      width: 6px;
+      height: 6px;
+      border-radius: 50%;
+      background: currentColor;
+      opacity: 0.35;
+      animation: dot-pulse 0.7s cubic-bezier(0.45, 0, 0.55, 1) infinite;
+    }
+    .submit-loading .dot:nth-child(2) { animation-delay: 0.1s; }
+    .submit-loading .dot:nth-child(3) { animation-delay: 0.2s; }
+
+    @keyframes dot-pulse {
+      0%, 60%, 100% { opacity: 0.25; transform: translateY(0); }
+      30%           { opacity: 1;    transform: translateY(-3px); }
     }
 
     /* ─── Scroll reveal ─── */
@@ -304,7 +351,7 @@
     }
 
     /* ═══════════════════════════════════════ */
-    /* LOADING SCREEN — Minimal & Professional */
+    /* LOADING SCREEN — Cinematic */
     /* ═══════════════════════════════════════ */
     #loader {
       position: fixed;
@@ -315,72 +362,153 @@
       align-items: center;
       justify-content: center;
       flex-direction: column;
-      animation: loader-exit 0.9s cubic-bezier(0.85, 0, 0.15, 1) 2s forwards;
+      overflow: hidden;
+      animation: loader-exit 1.1s cubic-bezier(0.85, 0, 0.15, 1) 2.6s forwards;
       pointer-events: none;
     }
-    @keyframes loader-exit {
-      0% { transform: translateY(0); opacity: 1; }
-      40% { opacity: 1; }
-      100% { transform: translateY(-100%); opacity: 1; }
+
+    /* Radial champagne glow that breathes behind the logo */
+    #loader::before {
+      content: '';
+      position: absolute;
+      inset: 0;
+      background: radial-gradient(ellipse 60% 50% at 50% 50%,
+        rgba(191, 167, 106, 0.25) 0%,
+        rgba(191, 167, 106, 0.08) 40%,
+        transparent 75%);
+      opacity: 0;
+      animation: loader-glow-in 1.4s cubic-bezier(0.16, 1, 0.3, 1) 0.1s forwards,
+                 loader-glow-pulse 4s ease-in-out 1.5s infinite;
+    }
+    @keyframes loader-glow-in {
+      to { opacity: 1; }
+    }
+    @keyframes loader-glow-pulse {
+      0%, 100% { opacity: 0.85; transform: scale(1); }
+      50%      { opacity: 1;    transform: scale(1.06); }
     }
 
-    /* Body lock during load */
+    /* Soft vignette on edges */
+    #loader::after {
+      content: '';
+      position: absolute;
+      inset: 0;
+      background: radial-gradient(ellipse at center, transparent 0%, transparent 50%, rgba(0,0,0,0.7) 100%);
+      pointer-events: none;
+    }
+
     body.loading {
       overflow: hidden;
     }
 
-    /* Loader content fades in cleanly — no draw animation */
     #loader-content {
+      position: relative;
+      z-index: 1;
       opacity: 0;
-      animation: loader-content-in 0.8s cubic-bezier(0.16, 1, 0.3, 1) 0.15s forwards;
+      transform: translateY(10px) scale(0.96);
+      animation: loader-content-in 1s cubic-bezier(0.16, 1, 0.3, 1) 0.1s forwards,
+                 loader-content-out 0.6s cubic-bezier(0.65, 0, 0.35, 1) 3.6s forwards;
     }
     @keyframes loader-content-in {
-      to { opacity: 1; }
+      to { opacity: 1; transform: translateY(0) scale(1); }
+    }
+    @keyframes loader-content-out {
+      to { opacity: 0; transform: translateY(-12px) scale(0.98); }
     }
 
-    /* Wordmark settles in below logo */
+    /* Logo: subtle fade + scale reveal, then gentle glow */
+    #loader-content svg {
+      filter: drop-shadow(0 0 24px rgba(191, 167, 106, 0.25));
+    }
+
+    /* ASCEND wordmark — letter shimmer sweep */
     #loader-word {
       opacity: 0;
-      transform: translateY(6px);
-      animation: word-in 0.7s cubic-bezier(0.16, 1, 0.3, 1) 0.4s forwards;
+      transform: translateY(8px);
+      animation: word-in 0.9s cubic-bezier(0.16, 1, 0.3, 1) 0.55s forwards;
+      background: linear-gradient(100deg,
+        #FFFFFF 0%,
+        #FFFFFF 40%,
+        #BFA76A 50%,
+        #FFFFFF 60%,
+        #FFFFFF 100%);
+      background-size: 200% 100%;
+      background-clip: text;
+      -webkit-background-clip: text;
+      color: transparent;
+      -webkit-text-fill-color: transparent;
+      animation: word-in 0.9s cubic-bezier(0.16, 1, 0.3, 1) 0.55s forwards,
+                 word-shimmer 3s cubic-bezier(0.65, 0, 0.35, 1) 1.2s infinite;
     }
     #loader-sub {
       opacity: 0;
-      animation: word-in 0.7s cubic-bezier(0.16, 1, 0.3, 1) 0.55s forwards;
+      animation: word-in 0.9s cubic-bezier(0.16, 1, 0.3, 1) 0.75s forwards;
     }
     @keyframes word-in {
       to { opacity: 1; transform: translateY(0); }
     }
+    @keyframes word-shimmer {
+      0%   { background-position: 200% 0; }
+      100% { background-position: -100% 0; }
+    }
 
-    /* Hairline progress indicator */
+    /* Gold progress bar with glow */
     #loader-bar {
       position: relative;
       width: 220px;
       height: 1px;
-      background: rgba(255, 255, 255, 0.1);
+      background: rgba(255, 255, 255, 0.08);
       overflow: hidden;
       margin-top: 56px;
+      opacity: 0;
+      animation: word-in 0.7s cubic-bezier(0.16, 1, 0.3, 1) 0.9s forwards;
     }
     #loader-bar::after {
       content: '';
       position: absolute;
       inset: 0;
-      background: #FFFFFF;
+      background: linear-gradient(90deg,
+        transparent 0%,
+        rgba(191, 167, 106, 0.4) 30%,
+        #BFA76A 50%,
+        rgba(191, 167, 106, 0.4) 70%,
+        transparent 100%);
       transform: scaleX(0);
       transform-origin: left;
-      animation: bar-fill 1.5s cubic-bezier(0.65, 0, 0.35, 1) 0.4s forwards;
+      animation: bar-fill 2s cubic-bezier(0.65, 0, 0.35, 1) 0.9s forwards;
+      box-shadow: 0 0 12px rgba(191, 167, 106, 0.6);
     }
     @keyframes bar-fill {
       to { transform: scaleX(1); }
     }
 
-    /* Loader exit fade for content (gentle) */
-    #loader-content {
-      animation: loader-content-in 0.8s cubic-bezier(0.16, 1, 0.3, 1) 0.15s forwards,
-                 loader-content-out 0.4s cubic-bezier(0.65, 0, 0.35, 1) 1.95s forwards;
+    /* Cinematic exit — loader zooms through + cross-fades into the page */
+    #loader {
+      animation: loader-exit 1.5s cubic-bezier(0.65, 0, 0.35, 1) 3.8s forwards !important;
     }
-    @keyframes loader-content-out {
-      to { opacity: 0; transform: translateY(-8px); }
+    @keyframes loader-exit {
+      0%   { opacity: 1; transform: scale(1);    filter: blur(0); }
+      50%  { opacity: 0.55; transform: scale(1.04); filter: blur(4px); }
+      100% { opacity: 0; transform: scale(1.1);  filter: blur(14px); visibility: hidden; }
+    }
+
+    /* Main page content cross-fades IN while the loader is fading OUT */
+    main {
+      opacity: 0;
+      transform: scale(0.985);
+      transition: opacity 1.3s cubic-bezier(0.16, 1, 0.3, 1),
+                  transform 1.3s cubic-bezier(0.16, 1, 0.3, 1);
+    }
+    body:not(.loading) main {
+      opacity: 1;
+      transform: scale(1);
+    }
+
+    /* Hold hero entrance animations until the loader starts exiting,
+       so they play as a graceful hand-off instead of being hidden underneath */
+    body.loading .anim-fade-up,
+    body.loading .anim-fade-in {
+      animation-play-state: paused;
     }
 
     /* ═══════════════════════════════════════ */
@@ -523,6 +651,21 @@
     /* Images load smoother with no layout shift */
     img {
       content-visibility: auto;
+    }
+
+    /* Force the browser to skip offscreen work even more aggressively */
+    .reveal {
+      contain: layout paint style;
+    }
+
+    /* Avoid repaint on hover for instructor cards — GPU-only transforms */
+    .instructor-card-trigger {
+      transform: translate3d(0, 0, 0);
+    }
+
+    /* Smooth iOS scrolling */
+    body {
+      -webkit-overflow-scrolling: touch;
     }
 
     /* ─── Selection styling ─── */
@@ -2186,7 +2329,7 @@
             </div>
           </div>
           <p class="text-cream/55 text-sm leading-[1.7] font-light max-w-sm">
-            A summer junior golf camp for every kind of player — from first-timers to tournament hopefuls. Run by three college students who love the game.
+            A summer junior golf camp for every kind of player — from first-timers to tournament hopefuls. Run by a team of college and high-school golfers who love the game.
           </p>
         </div>
 
@@ -2238,8 +2381,8 @@
         setTimeout(() => {
           document.body.classList.remove('loading');
           const loader = document.getElementById('loader');
-          if (loader) setTimeout(() => loader.remove(), 950);
-        }, 2000);
+          if (loader) setTimeout(() => loader.remove(), 1550);
+        }, 3800);
       });
     }
 
@@ -2453,7 +2596,7 @@
       const submitBtn = signupForm.querySelector('button[type=submit]');
       const originalBtnText = submitBtn.innerHTML;
       submitBtn.disabled = true;
-      submitBtn.innerHTML = 'Submitting…';
+      submitBtn.innerHTML = '<span class="submit-loading">Reserving<span class="dot"></span><span class="dot"></span><span class="dot"></span></span>';
 
       // Lock every form field so the user can't edit while we're sending
       const lockable = signupForm.querySelectorAll('input, select, textarea, button');
