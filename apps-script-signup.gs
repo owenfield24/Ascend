@@ -1,78 +1,102 @@
 // ╔════════════════════════════════════════════════════════════════╗
 // ║  ASCEND GOLF CAMP — Signup form handler                        ║
 // ║                                                                 ║
-// ║  How to use:                                                    ║
-// ║  1. Create a new Google Sheet (e.g. "Ascend — Reservations")   ║
-// ║  2. Open Extensions → Apps Script                              ║
-// ║  3. Replace the default code with everything in this file      ║
-// ║  4. Set NOTIFY_EMAIL below to your gmail (or leave blank)      ║
-// ║  5. Click Deploy → New deployment                              ║
-// ║     - Type: Web app                                            ║
-// ║     - Execute as: Me                                           ║
-// ║     - Who has access: Anyone                                   ║
-// ║  6. Copy the Web App URL and paste it into index.html         ║
-// ║     (search for APPS_SCRIPT_URL and replace)                   ║
+// ║  Features:                                                      ║
+// ║  • Per-week tabs with distinct color coding                    ║
+// ║  • Payment gate (only dropoff or confirmed online goes in)     ║
+// ║  • Email notification on every new reservation                 ║
+// ║  • Master "All Reservations" tab for an overview view          ║
 // ╚════════════════════════════════════════════════════════════════╝
 
 // ─── Config ─────────────────────────────────────────────────────
-const NOTIFY_EMAIL = 'info@ascendgolfcamp.com';   // Email to notify on every new reservation
+const NOTIFY_EMAIL = 'info@ascendgolfcamp.com';   // Change to your gmail if that doesn't exist yet
 const PRICE_PER_WEEK = 999.99;
-const SHEET_NAME = 'Reservations';
+const MASTER_SHEET = 'All Reservations';
+
+// 🔒 Set to true ONLY after you've wired up Stripe webhook signature verification.
+// While this is false, ALL online payment attempts are rejected — even if someone
+// tries to spoof a "paid" submission from DevTools. The only way in is Pay at Drop-Off.
+const ONLINE_PAYMENTS_ENABLED = false;
+
+// Colors per week — muted pastel palette that reads well with dark text
+const WEEK_COLORS = {
+  'Week I':    '#FCE8DE',  // peach
+  'Week II':   '#FDDADA',  // pink
+  'Week III':  '#FFF1C2',  // butter
+  'Week IV':   '#E0F1D3',  // sage
+  'Week V':    '#D7ECFA',  // powder blue
+  'Week VI':   '#DCDFFB',  // periwinkle
+  'Week VII':  '#EBD8FA',  // lavender
+  'Week VIII': '#FAD8EC',  // rose
+  'Week IX':   '#F9E4C8',  // apricot
+  'Week X':    '#D4F1E8',  // mint
+  'Week XI':   '#DFE9F7',  // ice
+  'Week XII':  '#F5D7C8'   // terracotta
+};
+
+// Column headers used in every sheet
+const HEADERS = [
+  'Submitted', 'Week', 'Parent', 'Camper', 'Age', 'Skill',
+  'Email', 'Phone', 'Total ($)', 'Dietary', 'Allergies',
+  'Emergency Name', 'Emergency Phone', 'Payment', 'Notes'
+];
 // ────────────────────────────────────────────────────────────────
 
 function doPost(e) {
   try {
     const data = JSON.parse(e.postData.contents);
 
-    // Basic validation
+    // ─── Validate ───
     if (!data.parentName || !data.camperName || !data.email || !data.phone || !Array.isArray(data.weeks) || data.weeks.length === 0) {
       return jsonResponse({ ok: false, error: 'Missing required fields' });
     }
 
-    const total = (data.weeks.length * PRICE_PER_WEEK).toFixed(2);
-    const timestamp = new Date();
-
-    // ─── Save to sheet ───
-    const ss = SpreadsheetApp.getActiveSpreadsheet();
-    let sheet = ss.getSheetByName(SHEET_NAME);
-    if (!sheet) {
-      sheet = ss.insertSheet(SHEET_NAME);
-      sheet.appendRow([
-        'Submitted', 'Parent', 'Camper', 'Age', 'Skill', 'Email', 'Phone',
-        'Weeks', 'Count', 'Total ($)', 'Dietary', 'Allergies',
-        'Emergency Name', 'Emergency Phone', 'Payment', 'Notes'
-      ]);
-      sheet.getRange(1, 1, 1, 16).setFontWeight('bold').setBackground('#1F5D2E').setFontColor('#FFFFFF');
-      sheet.setFrozenRows(1);
+    // ─── Payment gate ───
+    // Only Drop-Off is allowed right now. Online is blocked entirely at the server level
+    // until Stripe webhook verification is implemented — impossible to spoof from the browser.
+    const isDropoff = data.payment === 'dropoff';
+    const isConfirmedOnline = ONLINE_PAYMENTS_ENABLED
+      && data.payment === 'online'
+      && verifyStripePayment(data);  // Returns true only with a valid Stripe webhook signature
+    if (!isDropoff && !isConfirmedOnline) {
+      return jsonResponse({
+        ok: false,
+        error: 'Online payment is not yet available. Please select "Pay at Drop-Off" to complete your reservation.'
+      });
     }
 
-    sheet.appendRow([
-      timestamp,
-      data.parentName,
-      data.camperName,
-      data.camperAge || '',
-      data.skillLevel || '',
-      data.email,
-      data.phone,
-      data.weeks.join('; '),
-      data.weeks.length,
-      total,
-      data.dietary || '',
-      data.allergies || '',
-      data.emergencyName || '',
-      data.emergencyPhone || '',
-      data.payment || '',
-      data.notes || ''
-    ]);
+    const total = (data.weeks.length * PRICE_PER_WEEK).toFixed(2);
+    const timestamp = new Date();
+    const ss = SpreadsheetApp.getActiveSpreadsheet();
 
-    // ─── Send notification email ───
+    // ─── Append to per-week tabs (one row in each week's sheet) ───
+    data.weeks.forEach(function (weekFull) {
+      const weekKey = extractWeekKey(weekFull);             // e.g. "Week I"
+      const sheet = getOrCreateSheet(ss, weekKey, WEEK_COLORS[weekKey]);
+      const row = buildRow(data, weekFull, total, timestamp);
+      sheet.appendRow(row);
+      // Tint the new row with the week's color
+      const lastRow = sheet.getLastRow();
+      sheet.getRange(lastRow, 1, 1, row.length).setBackground(WEEK_COLORS[weekKey]);
+    });
+
+    // ─── Master "All Reservations" overview tab ───
+    const masterSheet = getOrCreateSheet(ss, MASTER_SHEET, '#1F5D2E');
+    data.weeks.forEach(function (weekFull) {
+      const weekKey = extractWeekKey(weekFull);
+      const row = buildRow(data, weekFull, total, timestamp);
+      masterSheet.appendRow(row);
+      const lastRow = masterSheet.getLastRow();
+      masterSheet.getRange(lastRow, 1, 1, row.length).setBackground(WEEK_COLORS[weekKey]);
+    });
+
+    // ─── Email notification ───
     if (NOTIFY_EMAIL) {
-      const htmlBody = buildEmailHtml(data, total, timestamp);
       GmailApp.sendEmail(NOTIFY_EMAIL,
         'New reservation: ' + data.camperName + ' (' + data.weeks.length + ' week' + (data.weeks.length === 1 ? '' : 's') + ')',
         'New reservation received. See HTML body for full details.',
         {
-          htmlBody: htmlBody,
+          htmlBody: buildEmailHtml(data, total, timestamp),
           replyTo: data.email,
           name: 'Ascend Reservations'
         }
@@ -87,13 +111,66 @@ function doPost(e) {
   }
 }
 
-function doGet(e) {
+function doGet() {
   return jsonResponse({ ok: true, service: 'Ascend Golf Camp signup handler' });
 }
 
+// ─── Helpers ───────────────────────────────────────────────────
+
+// Placeholder — always returns false until Stripe integration is wired up.
+// When Stripe is added, this function will verify the HMAC-SHA256 signature
+// on the Stripe-Signature header using your STRIPE_WEBHOOK_SECRET. A bad actor
+// cannot forge this signature, so online payments become tamper-proof.
+function verifyStripePayment(data) {
+  return false;
+}
+
+function extractWeekKey(weekFull) {
+  // Input: "Week I · May 27 – 29" → Output: "Week I"
+  const m = String(weekFull).match(/^Week\s+[IVX]+/);
+  return m ? m[0] : 'Other';
+}
+
+function getOrCreateSheet(ss, name, tabColor) {
+  let sheet = ss.getSheetByName(name);
+  if (!sheet) {
+    sheet = ss.insertSheet(name);
+    sheet.appendRow(HEADERS);
+    sheet.getRange(1, 1, 1, HEADERS.length)
+      .setFontWeight('bold')
+      .setBackground('#1F5D2E')
+      .setFontColor('#FFFFFF');
+    sheet.setFrozenRows(1);
+    // Auto-size the timestamp + week columns
+    sheet.setColumnWidth(1, 160);
+    sheet.setColumnWidth(2, 110);
+    if (tabColor) sheet.setTabColor(tabColor);
+  }
+  return sheet;
+}
+
+function buildRow(d, weekFull, total, timestamp) {
+  return [
+    timestamp,
+    weekFull,
+    d.parentName,
+    d.camperName,
+    d.camperAge || '',
+    d.skillLevel || '',
+    d.email,
+    d.phone,
+    total,
+    d.dietary || '',
+    d.allergies || '',
+    d.emergencyName || '',
+    d.emergencyPhone || '',
+    d.payment === 'online' ? 'Paid Online' : (d.payment === 'dropoff' ? 'Pay at Drop-Off' : d.payment || ''),
+    d.notes || ''
+  ];
+}
+
 function jsonResponse(obj) {
-  return ContentService
-    .createTextOutput(JSON.stringify(obj))
+  return ContentService.createTextOutput(JSON.stringify(obj))
     .setMimeType(ContentService.MimeType.JSON);
 }
 
@@ -112,7 +189,7 @@ function row(label, value) {
 
 function buildEmailHtml(d, total, timestamp) {
   const weeksHtml = d.weeks.map(function (w) { return '• ' + escape(w); }).join('<br>');
-  const paymentLabel = d.payment === 'online' ? 'Pay Online' : (d.payment === 'dropoff' ? 'Pay at Drop-Off' : (d.payment || ''));
+  const paymentLabel = d.payment === 'online' ? 'Paid Online' : (d.payment === 'dropoff' ? 'Pay at Drop-Off' : (d.payment || ''));
 
   return (
     '<div style="font-family:-apple-system,BlinkMacSystemFont,Segoe UI,Arial,sans-serif;background:#FBFAF5;padding:32px;color:#1A1A1A">' +
