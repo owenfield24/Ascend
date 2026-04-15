@@ -197,12 +197,14 @@
     /* ─── Scroll reveal ─── */
     .reveal {
       opacity: 0;
-      transform: translateY(30px);
-      transition: opacity 0.9s cubic-bezier(0.16, 1, 0.3, 1), transform 0.9s cubic-bezier(0.16, 1, 0.3, 1);
+      transform: translateY(24px);
+      transition: opacity 0.7s cubic-bezier(0.16, 1, 0.3, 1), transform 0.7s cubic-bezier(0.16, 1, 0.3, 1);
+      will-change: transform, opacity;
     }
     .reveal.visible {
       opacity: 1;
       transform: translateY(0);
+      will-change: auto;
     }
 
     /* ─── Buttons ─── */
@@ -470,6 +472,20 @@
     .liquid-slow-a, .liquid-slow-b, .liquid-slow-c {
       will-change: transform;
       transform: translateZ(0);
+      backface-visibility: hidden;
+    }
+
+    /* Pause cloud animations when the section is off-screen — huge CPU savings */
+    section:not(.in-view) .liquid-a,
+    section:not(.in-view) .liquid-b,
+    section:not(.in-view) .liquid-c,
+    section:not(.in-view) .liquid-slow-a,
+    section:not(.in-view) .liquid-slow-b,
+    section:not(.in-view) .liquid-slow-c,
+    footer:not(.in-view) .liquid-slow-a,
+    footer:not(.in-view) .liquid-slow-b,
+    footer:not(.in-view) .liquid-slow-c {
+      animation-play-state: paused !important;
     }
 
     /* Skip layout/paint for offscreen sections — massive performance win.
@@ -845,7 +861,7 @@
   <!-- ═══════════════════════════════════════ -->
   <!-- ABOUT — Dark continuation of the hero (chapter II) -->
   <!-- ═══════════════════════════════════════ -->
-  <section id="about" aria-label="About Ascend Golf Camp" class="relative bg-[#0A0E0B] text-cream overflow-x-clip py-28 md:py-44">
+  <section id="about" aria-label="About Ascend Golf Camp" class="relative bg-[#0A0E0B] text-cream overflow-x-clip py-24 md:py-28">
 
 
     <!-- ─── Same liquid-drift atmosphere as the hero ─── -->
@@ -985,7 +1001,7 @@
   <!-- ═══════════════════════════════════════ -->
   <!-- THE CAMP — Chapter III (unified dark base) -->
   <!-- ═══════════════════════════════════════ -->
-  <section id="camps" aria-label="The Ascend Camp — Three-Day Program & Weekly Sessions" class="relative py-28 md:py-36 bg-[#0A0E0B] text-cream overflow-hidden">
+  <section id="camps" aria-label="The Ascend Camp — Three-Day Program & Weekly Sessions" class="relative py-24 md:py-28 bg-[#0A0E0B] text-cream overflow-hidden">
     <!-- Same liquid-drift atmosphere as hero/about -->
     <svg class="absolute inset-0 w-full h-full pointer-events-none" viewBox="0 0 1440 1200" preserveAspectRatio="xMidYMid slice" aria-hidden="true">
       <defs>
@@ -1212,7 +1228,7 @@
       </div>
 
       <!-- ════════ A DAY AT ASCEND — Timeline ════════ -->
-      <div class="mt-28 md:mt-36 reveal" style="transition-delay: 0.2s;">
+      <div class="mt-48 md:mt-56 reveal" style="transition-delay: 0.2s;">
         <!-- Eyebrow -->
         <div class="text-center mb-6">
           <div class="flex items-baseline justify-center gap-4 mb-5">
@@ -1235,7 +1251,7 @@
           <div class="absolute left-3 md:left-5 top-3 bottom-3 w-px bg-gradient-to-b from-champagne/60 via-champagne/30 to-champagne/60"></div>
 
           <!-- Block 1 -->
-          <div class="relative mb-12">
+          <div class="relative mb-12 reveal" style="transition-delay: 0.05s;">
             <div class="absolute -left-8 md:-left-12 top-1.5 flex items-center justify-center w-6 h-6">
               <div class="w-2.5 h-2.5 bg-champagne rounded-full ring-4 ring-[#0A0E0B]"></div>
             </div>
@@ -1252,7 +1268,7 @@
           </div>
 
           <!-- Block 2 -->
-          <div class="relative mb-12">
+          <div class="relative mb-12 reveal" style="transition-delay: 0.1s;">
             <div class="absolute -left-8 md:-left-12 top-1.5 flex items-center justify-center w-6 h-6">
               <div class="w-2.5 h-2.5 bg-champagne rounded-full ring-4 ring-[#0A0E0B]"></div>
             </div>
@@ -1269,7 +1285,7 @@
           </div>
 
           <!-- Block 3 -->
-          <div class="relative mb-12">
+          <div class="relative mb-12 reveal" style="transition-delay: 0.15s;">
             <div class="absolute -left-8 md:-left-12 top-1.5 flex items-center justify-center w-6 h-6">
               <div class="w-2.5 h-2.5 bg-champagne rounded-full ring-4 ring-[#0A0E0B]"></div>
             </div>
@@ -1286,7 +1302,7 @@
           </div>
 
           <!-- Block 4 -->
-          <div class="relative mb-12">
+          <div class="relative mb-12 reveal" style="transition-delay: 0.2s;">
             <div class="absolute -left-8 md:-left-12 top-1.5 flex items-center justify-center w-6 h-6">
               <div class="w-2.5 h-2.5 bg-champagne rounded-full ring-4 ring-[#0A0E0B]"></div>
             </div>
@@ -1303,7 +1319,7 @@
           </div>
 
           <!-- Block 5 -->
-          <div class="relative mb-12">
+          <div class="relative mb-12 reveal" style="transition-delay: 0.25s;">
             <div class="absolute -left-8 md:-left-12 top-1.5 flex items-center justify-center w-6 h-6">
               <div class="w-2.5 h-2.5 bg-champagne rounded-full ring-4 ring-[#0A0E0B]"></div>
             </div>
@@ -1320,7 +1336,7 @@
           </div>
 
           <!-- Block 6 -->
-          <div class="relative mb-12">
+          <div class="relative mb-12 reveal" style="transition-delay: 0.3s;">
             <div class="absolute -left-8 md:-left-12 top-1.5 flex items-center justify-center w-6 h-6">
               <div class="w-2.5 h-2.5 bg-champagne rounded-full ring-4 ring-[#0A0E0B]"></div>
             </div>
@@ -1338,7 +1354,7 @@
           </div>
 
           <!-- Block 7 -->
-          <div class="relative mb-12">
+          <div class="relative mb-12 reveal" style="transition-delay: 0.35s;">
             <div class="absolute -left-8 md:-left-12 top-1.5 flex items-center justify-center w-6 h-6">
               <div class="w-2.5 h-2.5 bg-champagne rounded-full ring-4 ring-[#0A0E0B]"></div>
             </div>
@@ -1355,7 +1371,7 @@
           </div>
 
           <!-- Block 8 (final) -->
-          <div class="relative">
+          <div class="relative reveal" style="transition-delay: 0.4s;">
             <div class="absolute -left-8 md:-left-12 top-1.5 flex items-center justify-center w-6 h-6">
               <div class="w-3 h-3 bg-champagne rounded-full ring-4 ring-[#0A0E0B] shadow-[0_0_12px_rgba(191,167,106,0.6)]"></div>
             </div>
@@ -1379,7 +1395,7 @@
       </div>
 
       <!-- ════════ CHOOSE YOUR WEEK ════════ -->
-      <div class="mt-24 reveal" style="transition-delay: 0.25s;">
+      <div class="mt-48 md:mt-56 reveal" style="transition-delay: 0.25s;">
         <!-- Subhead -->
         <div class="text-center mb-12">
           <div class="flex items-baseline justify-center gap-4 mb-5">
@@ -1518,7 +1534,7 @@
   <!-- ═══════════════════════════════════════ -->
   <!-- INSTRUCTORS — Chapter IV (unified dark) -->
   <!-- ═══════════════════════════════════════ -->
-  <section id="instructors" aria-label="Meet the Ascend Golf Camp Instructors" class="relative py-28 md:py-36 bg-[#0A0E0B] text-cream overflow-hidden">
+  <section id="instructors" aria-label="Meet the Ascend Golf Camp Instructors" class="relative py-24 md:py-28 bg-[#0A0E0B] text-cream overflow-hidden">
 
     <!-- Same liquid-drift atmosphere as the rest -->
     <svg class="absolute inset-0 w-full h-full pointer-events-none" viewBox="0 0 1440 1200" preserveAspectRatio="xMidYMid slice" aria-hidden="true">
@@ -2196,6 +2212,10 @@
 
   <!-- Scripts -->
   <script>
+    // Always start at the top of the page on refresh or revisit
+    if ('scrollRestoration' in history) history.scrollRestoration = 'manual';
+    window.scrollTo(0, 0);
+
     // Loader: remove body lock + loader element after exit animation finishes
     // Skip loader entirely if ?noloader is present (used for screenshots)
     if (window.location.search.includes('noloader')) {
@@ -2648,7 +2668,18 @@
       if (e.key === 'Escape' && instructorModal.classList.contains('is-open')) closeInstructor();
     });
 
-    // Scroll reveal — reduced threshold + disconnect when all revealed
+    // Pause background cloud animations in sections that are off-screen
+    const sectionsWithClouds = document.querySelectorAll('section, footer');
+    const sectionObserver = new IntersectionObserver((entries) => {
+      for (const entry of entries) {
+        if (entry.isIntersecting) entry.target.classList.add('in-view');
+        else entry.target.classList.remove('in-view');
+      }
+    }, { rootMargin: '200px 0px' });
+    sectionsWithClouds.forEach(s => sectionObserver.observe(s));
+
+    // Scroll reveal — fires as soon as the top of an element enters the viewport,
+    // so sections feel like they "load in" from the top as you scroll down.
     const reveals = document.querySelectorAll('.reveal');
     let revealed = 0;
     const revealObserver = new IntersectionObserver((entries) => {
@@ -2660,7 +2691,7 @@
         }
       }
       if (revealed >= reveals.length) revealObserver.disconnect();
-    }, { threshold: 0.08, rootMargin: '0px 0px -80px 0px' });
+    }, { threshold: 0, rootMargin: '0px 0px -10% 0px' });
     reveals.forEach(el => revealObserver.observe(el));
   </script>
 </body>
