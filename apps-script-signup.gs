@@ -2,10 +2,13 @@
 // ║  ASCEND GOLF CAMP — Signup form handler                        ║
 // ║                                                                 ║
 // ║  Features:                                                      ║
-// ║  • Per-week tabs with distinct color coding                    ║
-// ║  • Payment gate (only dropoff or confirmed online goes in)     ║
-// ║  • Email notification on every new reservation                 ║
-// ║  • Master "All Reservations" tab for an overview view          ║
+// ║  • Per-week tabs (Week I … Week XII) with color-coded rows     ║
+// ║  • Master "Reservations" tab — every row color-coded by week   ║
+// ║  • Pay at Drop-Off cells highlighted red as a visual flag      ║
+// ║  • Payment gate — online payments blocked at the server until  ║
+// ║    Stripe webhook verification is wired up                     ║
+// ║  • HTML email notification on every new reservation             ║
+// ║  • Server-side validation of all required fields               ║
 // ╚════════════════════════════════════════════════════════════════╝
 
 // ─── Config ─────────────────────────────────────────────────────
@@ -14,6 +17,7 @@ const PRICE_PER_WEEK = 999.99;
 const MASTER_SHEET = 'Reservations';
 const DROPOFF_RED = '#FECACA';   // Soft red background for Pay at Drop-Off cells
 const DROPOFF_TEXT = '#991B1B';  // Deep red text for those cells
+const FALLBACK_COLOR = '#E5E3DB'; // Used when a week key doesn't match (shouldn't happen in practice)
 
 // 🔒 Set to true ONLY after you've wired up Stripe webhook signature verification.
 // While this is false, ALL online payment attempts are rejected — even if someone
@@ -78,12 +82,13 @@ function doPost(e) {
     // ─── Append to per-week tabs (one row in each week's sheet) ───
     data.weeks.forEach(function (weekFull) {
       const weekKey = extractWeekKey(weekFull);             // e.g. "Week I"
-      const sheet = getOrCreateSheet(ss, weekKey, WEEK_COLORS[weekKey]);
+      const weekColor = WEEK_COLORS[weekKey] || FALLBACK_COLOR;
+      const sheet = getOrCreateSheet(ss, weekKey, weekColor);
       const row = buildRow(data, weekFull, total, timestamp);
       sheet.appendRow(row);
       const lastRow = sheet.getLastRow();
       // Tint the new row with the week's color
-      sheet.getRange(lastRow, 1, 1, row.length).setBackground(WEEK_COLORS[weekKey]);
+      sheet.getRange(lastRow, 1, 1, row.length).setBackground(weekColor);
       // Red flag on Payment cell if Drop-Off (overrides week tint for that single cell)
       if (isDropoffPayment) {
         sheet.getRange(lastRow, paymentCol)
@@ -97,10 +102,11 @@ function doPost(e) {
     const masterSheet = getOrCreateSheet(ss, MASTER_SHEET, '#1F5D2E');
     data.weeks.forEach(function (weekFull) {
       const weekKey = extractWeekKey(weekFull);
+      const weekColor = WEEK_COLORS[weekKey] || FALLBACK_COLOR;
       const row = buildRow(data, weekFull, total, timestamp);
       masterSheet.appendRow(row);
       const lastRow = masterSheet.getLastRow();
-      masterSheet.getRange(lastRow, 1, 1, row.length).setBackground(WEEK_COLORS[weekKey]);
+      masterSheet.getRange(lastRow, 1, 1, row.length).setBackground(weekColor);
       if (isDropoffPayment) {
         masterSheet.getRange(lastRow, paymentCol)
           .setBackground(DROPOFF_RED)
@@ -193,7 +199,7 @@ function jsonResponse(obj) {
     .setMimeType(ContentService.MimeType.JSON);
 }
 
-function escape(s) {
+function htmlEscape(s) {
   return String(s == null ? '' : s).replace(/[&<>"']/g, function (c) {
     return { '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;', "'": '&#39;' }[c];
   });
@@ -201,13 +207,13 @@ function escape(s) {
 
 function row(label, value) {
   return '<tr>' +
-    '<td style="padding:6px 14px 6px 0;color:#6B6B6B;font-size:12px;text-transform:uppercase;letter-spacing:0.12em;vertical-align:top;white-space:nowrap">' + escape(label) + '</td>' +
-    '<td style="padding:6px 0;color:#1A1A1A;font-size:14px;vertical-align:top">' + (value ? escape(value) : '<span style="color:#999">—</span>') + '</td>' +
+    '<td style="padding:6px 14px 6px 0;color:#6B6B6B;font-size:12px;text-transform:uppercase;letter-spacing:0.12em;vertical-align:top;white-space:nowrap">' + htmlEscape(label) + '</td>' +
+    '<td style="padding:6px 0;color:#1A1A1A;font-size:14px;vertical-align:top">' + (value ? htmlEscape(value) : '<span style="color:#999">—</span>') + '</td>' +
     '</tr>';
 }
 
 function buildEmailHtml(d, total, timestamp) {
-  const weeksHtml = d.weeks.map(function (w) { return '• ' + escape(w); }).join('<br>');
+  const weeksHtml = d.weeks.map(function (w) { return '• ' + htmlEscape(w); }).join('<br>');
   const paymentLabel = d.payment === 'online' ? 'Paid Online' : (d.payment === 'dropoff' ? 'Pay at Drop-Off' : (d.payment || ''));
 
   return (
