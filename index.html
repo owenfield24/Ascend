@@ -1848,7 +1848,7 @@
           <div class="grid md:grid-cols-2 gap-5">
             <div>
               <label class="block text-[10px] tracking-[0.18em] uppercase text-forest font-semibold mb-2">Camper Age</label>
-              <select required class="w-full px-4 py-3 bg-cream border border-forest/15 text-sm text-charcoal font-light appearance-none cursor-pointer">
+              <select id="camperAge" required class="w-full px-4 py-3 bg-cream border border-forest/15 text-sm text-charcoal font-light appearance-none cursor-pointer">
                 <option value="">Select age</option>
                 <option>4</option><option>5</option><option>6</option><option>7</option>
                 <option>8</option><option>9</option><option>10</option><option>11</option><option>12</option>
@@ -1857,7 +1857,7 @@
             </div>
             <div>
               <label class="block text-[10px] tracking-[0.18em] uppercase text-forest font-semibold mb-2">Skill Level</label>
-              <select required class="w-full px-4 py-3 bg-cream border border-forest/15 text-sm text-charcoal font-light appearance-none cursor-pointer">
+              <select id="skillLevel" required class="w-full px-4 py-3 bg-cream border border-forest/15 text-sm text-charcoal font-light appearance-none cursor-pointer">
                 <option value="">Select level</option>
                 <option>Beginner</option>
                 <option>Intermediate</option>
@@ -1994,11 +1994,11 @@
             <div class="grid md:grid-cols-2 gap-5">
               <div>
                 <label class="block text-[10px] tracking-[0.18em] uppercase text-forest font-semibold mb-2">Dietary Restrictions <span class="text-stone font-light normal-case tracking-normal">(optional)</span></label>
-                <input type="text" class="w-full px-4 py-3 bg-cream border border-forest/15 text-sm text-charcoal placeholder:text-stone-light font-light" placeholder="e.g. Vegetarian, gluten-free, nut allergy">
+                <input type="text" id="dietary" class="w-full px-4 py-3 bg-cream border border-forest/15 text-sm text-charcoal placeholder:text-stone-light font-light" placeholder="e.g. Vegetarian, gluten-free, nut allergy">
               </div>
               <div>
                 <label class="block text-[10px] tracking-[0.18em] uppercase text-forest font-semibold mb-2">Allergies / Medical Conditions <span class="text-stone font-light normal-case tracking-normal">(optional)</span></label>
-                <input type="text" class="w-full px-4 py-3 bg-cream border border-forest/15 text-sm text-charcoal placeholder:text-stone-light font-light" placeholder="e.g. Bee sting allergy, asthma, EpiPen">
+                <input type="text" id="allergies" class="w-full px-4 py-3 bg-cream border border-forest/15 text-sm text-charcoal placeholder:text-stone-light font-light" placeholder="e.g. Bee sting allergy, asthma, EpiPen">
               </div>
             </div>
           </div>
@@ -2019,7 +2019,7 @@
 
           <div>
             <label class="block text-[10px] tracking-[0.18em] uppercase text-forest font-semibold mb-2">Additional Notes <span class="text-stone font-light normal-case tracking-normal">(optional)</span></label>
-            <textarea rows="2" class="w-full px-4 py-3 bg-cream border border-forest/15 text-sm text-charcoal placeholder:text-stone-light font-light resize-none" placeholder="Anything else we should know — questions, special requests, etc."></textarea>
+            <textarea id="notes" rows="2" class="w-full px-4 py-3 bg-cream border border-forest/15 text-sm text-charcoal placeholder:text-stone-light font-light resize-none" placeholder="Anything else we should know — questions, special requests, etc."></textarea>
           </div>
 
           <!-- Payment options -->
@@ -2445,28 +2445,29 @@
       submitBtn.innerHTML = 'Submitting…';
 
       const weeksSelected = Array.from(signupForm.querySelectorAll('input[name=weeks]:checked')).map(c => c.value);
-      const notesField = signupForm.querySelector('textarea');
-      const dietaryField = signupForm.querySelector('input[placeholder*="Vegetarian"]');
-      const allergyField = signupForm.querySelector('input[placeholder*="Bee sting"]');
+      const val = (id) => {
+        const el = document.getElementById(id);
+        return el ? String(el.value || '').trim() : '';
+      };
 
       const payload = {
-        parentName: document.getElementById('parentName').value.trim(),
-        camperName: document.getElementById('camperName').value.trim(),
-        email: document.getElementById('parentEmail').value.trim(),
-        phone: document.getElementById('parentPhone').value.trim(),
-        camperAge: signupForm.querySelectorAll('select[required]')[0]?.value || '',
-        skillLevel: signupForm.querySelectorAll('select[required]')[1]?.value || '',
-        weeks: weeksSelected,
-        dietary: dietaryField ? dietaryField.value.trim() : '',
-        allergies: allergyField ? allergyField.value.trim() : '',
-        emergencyName: document.getElementById('emergencyName').value.trim(),
-        emergencyPhone: document.getElementById('emergencyPhone').value.trim(),
-        notes: notesField ? notesField.value.trim() : '',
-        payment: paymentPicked ? paymentPicked.value : '',
+        parentName:     val('parentName'),
+        camperName:     val('camperName'),
+        email:          val('parentEmail'),
+        phone:          val('parentPhone'),
+        camperAge:      val('camperAge'),
+        skillLevel:     val('skillLevel'),
+        weeks:          weeksSelected,
+        dietary:        val('dietary'),
+        allergies:      val('allergies'),
+        emergencyName:  val('emergencyName'),
+        emergencyPhone: val('emergencyPhone'),
+        notes:          val('notes'),
+        payment:        paymentPicked ? paymentPicked.value : '',
       };
 
       // Replace APPS_SCRIPT_URL with the Web App URL from your Apps Script deployment
-      const APPS_SCRIPT_URL = 'https://script.google.com/macros/s/AKfycby7eg7DPPQJupyBtqwrPlDXIi8ZLxhM19onlakhpgsWmE2It47Z43sLz-EGMO7yrn39bg/exec';
+      const APPS_SCRIPT_URL = 'https://script.google.com/macros/s/AKfycbxrEiof2icBGri1EBw74_499oqYTeOffoOJzwBIYj_EbNHNYho-9246uJLBKC7-Ks6HnQ/exec';
 
       fetch(APPS_SCRIPT_URL, {
         method: 'POST',
