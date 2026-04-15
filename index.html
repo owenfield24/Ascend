@@ -350,6 +350,21 @@
       box-shadow: 0 8px 24px rgba(31, 93, 46, 0.25);
     }
 
+    /* On mobile the nav bar is always white with dark icons/text — no matter where you are on the page */
+    @media (max-width: 767px) {
+      #navbar {
+        color: #000000;
+        background: #FFFFFF;
+        border-bottom: 1px solid rgba(0, 0, 0, 0.06);
+        box-shadow: 0 4px 16px rgba(0, 0, 0, 0.04);
+      }
+      #navbar #navLogo,
+      #navbar #navWord,
+      #navbar #navMenuIcon { color: #000000; }
+      #navbar #navSub { color: rgba(0, 0, 0, 0.55); }
+      #navbar .nav-link { color: rgba(0, 0, 0, 0.7); }
+    }
+
     /* ═══════════════════════════════════════ */
     /* LOADING SCREEN — Cinematic */
     /* ═══════════════════════════════════════ */
@@ -487,21 +502,28 @@
       animation: loader-exit 1.5s cubic-bezier(0.65, 0, 0.35, 1) 3.8s forwards !important;
     }
     @keyframes loader-exit {
-      0%   { opacity: 1; transform: scale(1);    filter: blur(0); }
-      50%  { opacity: 0.55; transform: scale(1.04); filter: blur(4px); }
-      100% { opacity: 0; transform: scale(1.1);  filter: blur(14px); visibility: hidden; }
+      0%   { opacity: 1;    transform: scale(1);     filter: blur(0); }
+      20%  { opacity: 0.92; transform: scale(1.008); filter: blur(1px); }
+      40%  { opacity: 0.72; transform: scale(1.025); filter: blur(3px); }
+      60%  { opacity: 0.48; transform: scale(1.05);  filter: blur(6px); }
+      80%  { opacity: 0.22; transform: scale(1.08);  filter: blur(10px); }
+      100% { opacity: 0;    transform: scale(1.1);   filter: blur(14px); visibility: hidden; }
     }
 
-    /* Main page content cross-fades IN while the loader is fading OUT */
+    /* Main page content cross-fades IN + un-blurs as the loader fades OUT */
     main {
       opacity: 0;
       transform: scale(0.985);
-      transition: opacity 1.3s cubic-bezier(0.16, 1, 0.3, 1),
-                  transform 1.3s cubic-bezier(0.16, 1, 0.3, 1);
+      filter: blur(8px);
+      transition: opacity 1.4s cubic-bezier(0.22, 1, 0.36, 1),
+                  transform 1.4s cubic-bezier(0.22, 1, 0.36, 1),
+                  filter 1.4s cubic-bezier(0.22, 1, 0.36, 1);
+      will-change: opacity, transform, filter;
     }
     body:not(.loading) main {
       opacity: 1;
       transform: scale(1);
+      filter: blur(0);
     }
 
     /* Hold hero entrance animations until the loader starts exiting,
