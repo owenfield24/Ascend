@@ -2250,10 +2250,57 @@
         return;
       }
 
-      // All good — show confirmation
-      document.getElementById('signupFormView').classList.add('hidden');
-      signupConfirmation.classList.remove('hidden');
-      modal.querySelector('.modal-card').scrollTop = 0;
+      // All good — send to API, then show confirmation
+      const submitBtn = signupForm.querySelector('button[type=submit]');
+      const originalBtnText = submitBtn.innerHTML;
+      submitBtn.disabled = true;
+      submitBtn.innerHTML = 'Submitting…';
+
+      const weeksSelected = Array.from(signupForm.querySelectorAll('input[name=weeks]:checked')).map(c => c.value);
+      const notesField = signupForm.querySelector('textarea');
+      const dietaryField = signupForm.querySelector('input[placeholder*="Vegetarian"]');
+      const allergyField = signupForm.querySelector('input[placeholder*="Bee sting"]');
+
+      const payload = {
+        parentName: document.getElementById('parentName').value.trim(),
+        camperName: document.getElementById('camperName').value.trim(),
+        email: document.getElementById('parentEmail').value.trim(),
+        phone: document.getElementById('parentPhone').value.trim(),
+        camperAge: signupForm.querySelectorAll('select[required]')[0]?.value || '',
+        skillLevel: signupForm.querySelectorAll('select[required]')[1]?.value || '',
+        weeks: weeksSelected,
+        dietary: dietaryField ? dietaryField.value.trim() : '',
+        allergies: allergyField ? allergyField.value.trim() : '',
+        emergencyName: document.getElementById('emergencyName').value.trim(),
+        emergencyPhone: document.getElementById('emergencyPhone').value.trim(),
+        notes: notesField ? notesField.value.trim() : '',
+        payment: paymentPicked ? paymentPicked.value : '',
+      };
+
+      // Replace APPS_SCRIPT_URL with the Web App URL from your Apps Script deployment
+      const APPS_SCRIPT_URL = 'https://script.google.com/macros/s/AKfycbxDq_nsKbjsY9rgSwXB81ubndq2hJGBfjmmeevJuF7wcHuP7wlHHIYKu8Fn0A9-orYpDg/exec';
+
+      fetch(APPS_SCRIPT_URL, {
+        method: 'POST',
+        // No Content-Type header — lets it send as text/plain to avoid CORS preflight
+        body: JSON.stringify(payload),
+        redirect: 'follow',
+      })
+        .then(r => r.ok ? r.json() : Promise.reject(new Error('Submission failed')))
+        .then((res) => {
+          if (res && res.ok === false) throw new Error(res.error || 'Submission failed');
+          document.getElementById('signupFormView').classList.add('hidden');
+          signupConfirmation.classList.remove('hidden');
+          modal.querySelector('.modal-card').scrollTop = 0;
+        })
+        .catch((err) => {
+          console.error(err);
+          alert("We couldn't submit your reservation right now. Please try again in a moment, or email info@ascendgolfcamp.com directly.");
+        })
+        .finally(() => {
+          submitBtn.disabled = false;
+          submitBtn.innerHTML = originalBtnText;
+        });
     });
 
     function resetSignupForm() {
