@@ -257,12 +257,10 @@
       opacity: 0;
       transform: translateY(24px);
       transition: opacity 0.7s cubic-bezier(0.16, 1, 0.3, 1), transform 0.7s cubic-bezier(0.16, 1, 0.3, 1);
-      will-change: transform, opacity;
     }
     .reveal.visible {
       opacity: 1;
       transform: translateY(0);
-      will-change: auto;
     }
 
     /* ─── Buttons ─── */
@@ -629,8 +627,6 @@
     .liquid-a, .liquid-b, .liquid-c,
     .liquid-slow-a, .liquid-slow-b, .liquid-slow-c {
       will-change: transform;
-      transform: translateZ(0);
-      backface-visibility: hidden;
     }
 
     /* Pause cloud animations when the section is off-screen — huge CPU savings */
@@ -646,46 +642,10 @@
       animation-play-state: paused !important;
     }
 
-    /* Skip layout/paint for offscreen sections — massive performance win.
-       Browsers render sections only when they scroll near the viewport. */
-    #about, #camps, #instructors, footer {
-      content-visibility: auto;
-      contain-intrinsic-size: 1px 1000px;
-    }
-
-    /* Prevent layout thrash — hint browser to isolate expensive subtrees */
-    .instructor-card-trigger,
-    .week-card {
-      contain: layout paint;
-    }
-
-    /* Reduce paint on scroll */
-    html {
-      text-rendering: optimizeSpeed;
-    }
-    h1, h2, h3, .font-display {
-      text-rendering: optimizeLegibility;
-    }
-
-    /* Images load smoother with no layout shift */
-    img {
-      content-visibility: auto;
-    }
-
-    /* Force the browser to skip offscreen work even more aggressively */
-    .reveal {
-      contain: layout paint style;
-    }
-
-    /* Avoid repaint on hover for instructor cards — GPU-only transforms */
-    .instructor-card-trigger {
-      transform: translate3d(0, 0, 0);
-    }
-
-    /* Smooth iOS scrolling */
-    body {
-      -webkit-overflow-scrolling: touch;
-    }
+    /* Smooth scrolling + font rendering */
+    html { text-rendering: optimizeSpeed; }
+    h1, h2, h3, .font-display { text-rendering: optimizeLegibility; }
+    body { -webkit-overflow-scrolling: touch; }
 
     /* ─── Selection styling ─── */
     ::selection { background: rgba(191, 167, 106, 0.35); color: #1A1A1A; }
@@ -1428,7 +1388,7 @@
                   <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="#BFA76A" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M3 12l9-9 9 9M5 10v10h14V10"/><path d="M9 20v-6h6v6"/></svg>
                   <div class="text-cream text-base md:text-lg font-semibold">Roll In &amp; Gear Up</div>
                 </div>
-                <div class="text-cream/55 text-sm font-light leading-[1.85]">Pull up to the course, meet your coach, snag a fresh Ascend water and snack. You're officially on the clock.</div>
+                <div class="text-cream/55 text-sm font-light leading-[1.85]">Show up, meet your coach, grab a water. We'll get you set up before heading out to the range.</div>
               </div>
             </div>
           </div>
@@ -1445,7 +1405,7 @@
                   <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="#BFA76A" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M13 2L5 14h6l-2 8 8-12h-6z"/></svg>
                   <div class="text-cream text-base md:text-lg font-semibold">Warm Up &amp; Wake Up</div>
                 </div>
-                <div class="text-cream/55 text-sm font-light leading-[1.85]">Loosen up with a guided stretch, then start sending balls down the range. Feel the swing come back to life.</div>
+                <div class="text-cream/55 text-sm font-light leading-[1.85]">Quick stretch, then straight to the range. A few easy swings to get loose before we really get into it.</div>
               </div>
             </div>
           </div>
@@ -1462,7 +1422,7 @@
                   <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="#BFA76A" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><rect x="4" y="5" width="16" height="14" rx="1.5"/><circle cx="16" cy="9" r="2"/></svg>
                   <div class="text-cream text-base md:text-lg font-semibold">Full Swing on Trackman</div>
                 </div>
-                <div class="text-cream/55 text-sm font-light leading-[1.85]">Dial in driver and irons with small-group coaching. Every swing gets tracked, every number tells a story.</div>
+                <div class="text-cream/55 text-sm font-light leading-[1.85]">Small-group work on driver and irons. Trackman runs in the background so you can see exactly what your swing is doing and where to tighten it up.</div>
               </div>
             </div>
           </div>
@@ -1479,7 +1439,7 @@
                   <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="#BFA76A" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="9"/><circle cx="12" cy="12" r="5"/><circle cx="12" cy="12" r="1.5" fill="#BFA76A"/></svg>
                   <div class="text-cream text-base md:text-lg font-semibold">Short Game Showdown</div>
                 </div>
-                <div class="text-cream/55 text-sm font-light leading-[1.85]">Chip, pitch, and putt across three stations. Sink one from the fringe and you'll feel like a pro.</div>
+                <div class="text-cream/55 text-sm font-light leading-[1.85]">Chipping, pitching, and putting stations. This is where scores actually drop, and the stuff most kids never get real reps on.</div>
               </div>
             </div>
           </div>
@@ -1496,7 +1456,7 @@
                   <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="#BFA76A" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M3 2v7a2 2 0 002 2h2a2 2 0 002-2V2M7 2v20M21 15V2a5 5 0 00-5 5v6a2 2 0 002 2h3zm0 0v7"/></svg>
                   <div class="text-cream text-base md:text-lg font-semibold">Lunch &amp; Hang</div>
                 </div>
-                <div class="text-cream/55 text-sm font-light leading-[1.85]">Fresh catered lunch in the shade. Trade stories with new friends, talk swings, and get ready for the back half.</div>
+                <div class="text-cream/55 text-sm font-light leading-[1.85]">Fresh lunch, shade, and time to hang out. Coaches break down the morning while the kids eat.</div>
               </div>
             </div>
           </div>
@@ -1514,7 +1474,7 @@
                   <div class="text-cream text-base md:text-lg font-semibold">Out on Course</div>
                   <span class="ml-1 text-[9px] tracking-[0.2em] uppercase font-bold text-champagne-dark bg-champagne/20 border border-champagne/40 px-2 py-0.5">Friday · 9 Holes</span>
                 </div>
-                <div class="text-cream/55 text-sm font-light leading-[1.85]">Play real holes with your coach walking alongside. Wednesday &amp; Thursday we play a few, then <span class="text-champagne font-medium">Friday it's a full 9-hole round</span> to put the week together.</div>
+                <div class="text-cream/55 text-sm font-light leading-[1.85]">Real holes on the course with your coach walking alongside. Wednesday and Thursday we play a few, and <span class="text-champagne font-medium">Friday it's a full 9-hole round</span> to pull everything together.</div>
               </div>
             </div>
           </div>
@@ -1531,7 +1491,7 @@
                   <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="#BFA76A" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M6 3h12v7a6 6 0 01-12 0V3z"/><path d="M6 7H3a3 3 0 003 3M18 7h3a3 3 0 01-3 3M10 22h4M12 16v6"/></svg>
                   <div class="text-cream text-base md:text-lg font-semibold">Daily Challenge</div>
                 </div>
-                <div class="text-cream/55 text-sm font-light leading-[1.85]">Long-drive contests. Closest-to-the-pin. Putting duels. Bring your A-game — winners take home real prizes.</div>
+                <div class="text-cream/55 text-sm font-light leading-[1.85]">Long drive, closest to the pin, putting showdown. Whoever wins walks home with a prize.</div>
               </div>
             </div>
           </div>
@@ -1549,7 +1509,7 @@
                   <div class="text-cream text-base md:text-lg font-semibold">Wrap &amp; High Fives</div>
                   <span class="ml-1 text-[9px] tracking-[0.2em] uppercase font-bold text-champagne-dark bg-champagne/20 border border-champagne/40 px-2 py-0.5">Friday · Awards Ceremony</span>
                 </div>
-                <div class="text-cream/55 text-sm font-light leading-[1.85]">One-on-one feedback from your coach, a quick plan for tomorrow, high fives all around. On <span class="text-champagne font-medium">Friday at 3:00 PM, we wrap the week with a closing awards ceremony</span> — recognizing standout moments, big improvements, and the week's challenge winners.</div>
+                <div class="text-cream/55 text-sm font-light leading-[1.85]">Quick feedback from your coach, a plan for tomorrow, and you're done for the day. <span class="text-champagne font-medium">Friday at 3 we end with an awards ceremony</span> for the week's challenge winners.</div>
               </div>
             </div>
           </div>
