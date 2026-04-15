@@ -350,19 +350,21 @@
       box-shadow: 0 8px 24px rgba(31, 93, 46, 0.25);
     }
 
-    /* On mobile the nav bar is always white with dark icons/text — no matter where you are on the page */
+    /* On mobile the nav bar is always black with white icons/text — no matter where you are on the page */
     @media (max-width: 767px) {
       #navbar {
-        color: #000000;
-        background: #FFFFFF;
-        border-bottom: 1px solid rgba(0, 0, 0, 0.06);
-        box-shadow: 0 4px 16px rgba(0, 0, 0, 0.04);
+        color: #FFFFFF !important;
+        background: #0A0E0B !important;
+        border-bottom: 1px solid rgba(255, 255, 255, 0.08) !important;
+        box-shadow: 0 4px 16px rgba(0, 0, 0, 0.35) !important;
+        backdrop-filter: none !important;
+        -webkit-backdrop-filter: none !important;
       }
       #navbar #navLogo,
       #navbar #navWord,
-      #navbar #navMenuIcon { color: #000000; }
-      #navbar #navSub { color: rgba(0, 0, 0, 0.55); }
-      #navbar .nav-link { color: rgba(0, 0, 0, 0.7); }
+      #navbar #navMenuIcon { color: #FFFFFF !important; }
+      #navbar #navSub { color: rgba(255, 255, 255, 0.55) !important; }
+      #navbar .nav-link { color: rgba(255, 255, 255, 0.7) !important; }
     }
 
     /* ═══════════════════════════════════════ */
