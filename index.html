@@ -194,6 +194,17 @@
     .d6 { animation-delay: 0.6s; }
     .d7 { animation-delay: 0.7s; }
 
+    /* ─── Signup form locked state during submission ─── */
+    #signupForm.submitting {
+      pointer-events: none;
+      opacity: 0.65;
+      transition: opacity 0.25s ease;
+    }
+    #signupForm.submitting button[type=submit] {
+      opacity: 1;
+      cursor: progress;
+    }
+
     /* ─── Scroll reveal ─── */
     .reveal {
       opacity: 0;
@@ -2052,7 +2063,7 @@
 
               <!-- Pay at drop-off — highlighted red as the active option -->
               <label class="relative flex items-start gap-3 p-4 border-2 border-red-500 bg-red-50 cursor-pointer hover:bg-red-100 transition-colors duration-200 has-[:checked]:border-red-600 has-[:checked]:bg-red-100">
-                <input type="radio" name="payment" value="dropoff" class="mt-1 accent-red-600" required>
+                <input type="radio" name="payment" value="dropoff" class="mt-1 accent-red-600" required checked>
                 <div class="flex-1">
                   <div class="flex items-center gap-2 mb-1">
                     <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="#DC2626" stroke-width="1.8" stroke-linecap="round"><circle cx="12" cy="12" r="9"/><path d="M12 6v6l4 2"/></svg>
@@ -2444,6 +2455,11 @@
       submitBtn.disabled = true;
       submitBtn.innerHTML = 'Submitting…';
 
+      // Lock every form field so the user can't edit while we're sending
+      const lockable = signupForm.querySelectorAll('input, select, textarea, button');
+      lockable.forEach(el => { el.disabled = true; });
+      signupForm.classList.add('submitting');
+
       const weeksSelected = Array.from(signupForm.querySelectorAll('input[name=weeks]:checked')).map(c => c.value);
       const val = (id) => {
         const el = document.getElementById(id);
@@ -2487,7 +2503,10 @@
           alert("We couldn't submit your reservation right now. Please try again in a moment, or email info@ascendgolfcamp.com directly.");
         })
         .finally(() => {
-          submitBtn.disabled = false;
+          // Unlock the form (on error path) — on success the form is hidden behind the confirmation
+          if (!signupConfirmation.classList.contains('hidden')) return;
+          lockable.forEach(el => { el.disabled = false; });
+          signupForm.classList.remove('submitting');
           submitBtn.innerHTML = originalBtnText;
         });
     });
