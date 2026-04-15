@@ -11,7 +11,9 @@
 // ─── Config ─────────────────────────────────────────────────────
 const NOTIFY_EMAIL = 'info@ascendgolfcamp.com';   // Change to your gmail if that doesn't exist yet
 const PRICE_PER_WEEK = 999.99;
-const MASTER_SHEET = 'All Reservations';
+const MASTER_SHEET = 'Reservations';
+const DROPOFF_RED = '#FECACA';   // Soft red background for Pay at Drop-Off cells
+const DROPOFF_TEXT = '#991B1B';  // Deep red text for those cells
 
 // 🔒 Set to true ONLY after you've wired up Stripe webhook signature verification.
 // While this is false, ALL online payment attempts are rejected — even if someone
@@ -69,18 +71,29 @@ function doPost(e) {
     const timestamp = new Date();
     const ss = SpreadsheetApp.getActiveSpreadsheet();
 
+    // Payment column index (1-based) based on HEADERS order
+    const paymentCol = HEADERS.indexOf('Payment') + 1;
+    const isDropoffPayment = data.payment === 'dropoff';
+
     // ─── Append to per-week tabs (one row in each week's sheet) ───
     data.weeks.forEach(function (weekFull) {
       const weekKey = extractWeekKey(weekFull);             // e.g. "Week I"
       const sheet = getOrCreateSheet(ss, weekKey, WEEK_COLORS[weekKey]);
       const row = buildRow(data, weekFull, total, timestamp);
       sheet.appendRow(row);
-      // Tint the new row with the week's color
       const lastRow = sheet.getLastRow();
+      // Tint the new row with the week's color
       sheet.getRange(lastRow, 1, 1, row.length).setBackground(WEEK_COLORS[weekKey]);
+      // Red flag on Payment cell if Drop-Off (overrides week tint for that single cell)
+      if (isDropoffPayment) {
+        sheet.getRange(lastRow, paymentCol)
+          .setBackground(DROPOFF_RED)
+          .setFontColor(DROPOFF_TEXT)
+          .setFontWeight('bold');
+      }
     });
 
-    // ─── Master "All Reservations" overview tab ───
+    // ─── Master "Reservations" overview tab — one row per week selected ───
     const masterSheet = getOrCreateSheet(ss, MASTER_SHEET, '#1F5D2E');
     data.weeks.forEach(function (weekFull) {
       const weekKey = extractWeekKey(weekFull);
@@ -88,6 +101,12 @@ function doPost(e) {
       masterSheet.appendRow(row);
       const lastRow = masterSheet.getLastRow();
       masterSheet.getRange(lastRow, 1, 1, row.length).setBackground(WEEK_COLORS[weekKey]);
+      if (isDropoffPayment) {
+        masterSheet.getRange(lastRow, paymentCol)
+          .setBackground(DROPOFF_RED)
+          .setFontColor(DROPOFF_TEXT)
+          .setFontWeight('bold');
+      }
     });
 
     // ─── Email notification ───
