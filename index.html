@@ -512,20 +512,15 @@
       100% { opacity: 0;    transform: scale(1.1);   filter: blur(14px); visibility: hidden; }
     }
 
-    /* Main page content cross-fades IN + un-blurs as the loader fades OUT */
+    /* Main page content cross-fades IN as the loader fades OUT.
+       Deliberately NO filter/transform here — those create a containing block
+       that would trap fixed-position modal descendants. Opacity-only is safe. */
     main {
       opacity: 0;
-      transform: scale(0.985);
-      filter: blur(8px);
-      transition: opacity 1.4s cubic-bezier(0.22, 1, 0.36, 1),
-                  transform 1.4s cubic-bezier(0.22, 1, 0.36, 1),
-                  filter 1.4s cubic-bezier(0.22, 1, 0.36, 1);
-      will-change: opacity, transform, filter;
+      transition: opacity 1.4s cubic-bezier(0.22, 1, 0.36, 1);
     }
     body:not(.loading) main {
       opacity: 1;
-      transform: scale(1);
-      filter: blur(0);
     }
 
     /* Hold hero entrance animations until the loader starts exiting,
@@ -1133,13 +1128,10 @@
         <div class="h-px w-20 md:w-24 bg-champagne/30"></div>
       </div>
 
-      <!-- Two-column body for elegant readability -->
-      <div class="grid md:grid-cols-2 gap-10 lg:gap-16 max-w-3xl mx-auto mb-20 md:mb-24 text-left reveal" style="transition-delay: 0.15s;">
+      <!-- Centered body paragraph -->
+      <div class="max-w-2xl mx-auto mb-20 md:mb-24 text-center reveal" style="transition-delay: 0.15s;">
         <p class="text-cream/65 text-[15px] md:text-base font-light leading-[1.85]">
           Ascend is a private summer golf camp based in <span class="text-champagne">San Diego, California</span>, led by a team of current collegiate players. Between them the staff brings <span class="text-champagne">All-Pac-12 honors</span>, <span class="text-champagne">four-time Rolex All-American</span> selections, a <span class="text-champagne">U.S. Amateur</span> qualification, and <span class="text-champagne">NCAA Regional</span> experience. We meet every camper where they are, with small groups, real instruction, and a relaxed setting kids actually enjoy.
-        </p>
-        <p class="text-cream/65 text-[15px] md:text-base font-light leading-[1.85]">
-          Sessions run Wednesday through Friday across the summer, from late May through mid August. No experience required.
         </p>
       </div>
 
